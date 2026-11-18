@@ -1,0 +1,313 @@
+---
+import '@fontsource-variable/schibsted-grotesk';
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
+import '../styles/global.css';
+import Wave from '../components/Wave.astro';
+import { SITE } from '../site.config';
+import { TEAM } from '../data/team';
+import { url } from '../utils';
+
+interface Props {
+  title?: string;
+  description?: string;
+  heading?: string; // big title in the dark band (inner pages)
+  lede?: string; // one line under the heading
+}
+
+const { title, description = SITE.description, heading, lede } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE.title}` : `${SITE.title}: ${SITE.role}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const nav = [
+  { label: 'Biography', href: url('/biography/') },
+  { label: 'Research', href: url('/research/') },
+  { label: 'Publications', href: url('/publications/') },
+  { label: 'Teaching', href: url('/teaching/') },
+  ...(TEAM.length > 0 ? [{ label: 'Team', href: url('/team/') }] : []),
+  { label: 'Contact', href: '#contact' },
+];
+
+const here = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en-IE">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {SITE.photo && <meta property="og:image" content={new URL(url(`/${SITE.photo}`), Astro.site)} />}
+    <meta name="generator" content={Astro.generator} />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="band">
+      <div class="wrap bar">
+        <a class="brand" href={url('/')}>{SITE.name}</a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+        <nav id="site-nav" aria-label="Main">
+          <ul>
+            {
+              nav.map((item) => (
+                <li>
+                  <a href={item.href} aria-current={here.startsWith(item.href) && item.href !== '#contact' ? 'page' : undefined}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+
+      <div class="wrap band-body">
+        <slot name="hero">
+          {heading && <h1>{heading}</h1>}
+          {lede && <p class="band-lede">{lede}</p>}
+        </slot>
+      </div>
+      <Wave />
+    </header>
+
+    <main id="main" class="wrap">
+      <slot />
+    </main>
+
+    <footer id="contact">
+      <div class="wrap footer-grid">
+        <div>
+          <h2>Contact</h2>
+          <address>
+            {SITE.address.map((line) => <span>{line}</span>)}
+          </address>
+          {SITE.email && <p><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>}
+        </div>
+        <div>
+          <h2>Elsewhere</h2>
+          <ul>
+            {
+              SITE.links.map((link) => (
+                <li>
+                  <a href={link.href} rel="me">
+                    {link.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <p class="wrap small">© {new Date().getFullYear()} {SITE.name}</p>
+    </footer>
+
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+      const nav = document.getElementById('site-nav');
+      toggle?.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!open));
+        toggle.textContent = open ? 'Menu' : 'Close';
+        nav?.classList.toggle('open', !open);
+      });
+      nav?.querySelectorAll('a').forEach((a) =>
+        a.addEventListener('click', () => {
+          if (toggle?.getAttribute('aria-expanded') === 'true') toggle.click();
+        }),
+      );
+    </script>
+  </body>
+</html>
+
+<style>
+  body {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .skip {
+    position: absolute;
+    left: -999px;
+  }
+
+  .skip:focus {
+    left: 0.75rem;
+    top: 0.75rem;
+    z-index: 10;
+    padding: 0.5rem 0.75rem;
+    background: var(--signal);
+    color: var(--navy);
+  }
+
+  /* ---- Dark band ---- */
+  .band {
+    background: var(--navy);
+    color: var(--on-navy);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    padding-block: 1.25rem;
+  }
+
+  .brand {
+    color: var(--on-navy);
+    font-weight: 650;
+    text-decoration: none;
+    letter-spacing: -0.005em;
+  }
+
+  nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    color: var(--on-navy-muted);
+    text-decoration: none;
+    padding-block: 0.25rem;
+    border-bottom: 2px solid transparent;
+  }
+
+  nav a:hover {
+    color: var(--on-navy);
+  }
+
+  nav a[aria-current='page'] {
+    color: var(--on-navy);
+    border-bottom-color: var(--signal);
+  }
+
+  .menu-toggle {
+    display: none;
+    font: inherit;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--on-navy);
+    background: none;
+    border: 1px solid var(--navy-line);
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 48rem) {
+    :global(.js) .menu-toggle {
+      display: inline-block;
+    }
+
+    :global(.js) #site-nav {
+      display: none;
+      flex-basis: 100%;
+    }
+
+    :global(.js) #site-nav.open {
+      display: block;
+    }
+
+    #site-nav ul {
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid var(--navy-line);
+    }
+
+    #site-nav li {
+      border-bottom: 1px solid var(--navy-line);
+    }
+
+    #site-nav a {
+      display: block;
+      padding-block: 0.75rem;
+      border-bottom: 0;
+    }
+
+    #site-nav a[aria-current='page'] {
+      box-shadow: inset 3px 0 0 var(--signal);
+      padding-left: 0.75rem;
+    }
+  }
+
+  .band-body {
+    padding-top: clamp(1.5rem, 5vw, 3.5rem);
+  }
+
+  .band-body h1 {
+    margin: 0;
+    font-size: var(--step-3);
+    color: var(--on-navy);
+  }
+
+  .band-lede {
+    max-width: var(--measure);
+    margin: 0.75rem 0 0;
+    color: var(--on-navy-muted);
+    font-size: var(--step-1);
+    line-height: 1.45;
+  }
+
+  /* ---- Main and footer ---- */
+  main {
+    flex: 1;
+    padding-block: clamp(2.5rem, 6vw, 4rem) clamp(3.5rem, 8vw, 5.5rem);
+  }
+
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--rule);
+    padding-block: 2.5rem 1.5rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 2rem;
+  }
+
+  footer h2 {
+    margin: 0 0 0.75rem;
+    font-size: var(--step-1);
+  }
+
+  address {
+    display: grid;
+    font-style: normal;
+    color: var(--muted);
+  }
+
+  footer p {
+    margin: 0.75rem 0 0;
+  }
+
+  footer ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  footer p.small {
+    margin: 2rem auto 0;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+</style>

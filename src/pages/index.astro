@@ -1,0 +1,216 @@
+---
+import Base from '../layouts/Base.astro';
+import Portrait from '../components/Portrait.astro';
+import ThemeCard from '../components/ThemeCard.astro';
+import PubItem from '../components/PubItem.astro';
+import { SITE } from '../site.config';
+import { THEMES } from '../data/themes';
+import { PUBLICATIONS } from '../data/publications';
+import { PROJECTS } from '../data/projects';
+import { MODULES } from '../data/teaching';
+import { url } from '../utils';
+
+const countFor = (id: string) => PUBLICATIONS.filter((p) => p.themes.includes(id as never)).length;
+const recent = PUBLICATIONS.filter((p) => p.type === 'journal' || p.type === 'conference').slice(0, 5);
+const papers = PUBLICATIONS.filter((p) => p.type === 'journal' || p.type === 'conference').length;
+const current = PROJECTS[0];
+---
+
+<Base>
+  <div slot="hero" class="hero">
+    <Portrait size={136} />
+    <div>
+      <h1>{SITE.title}</h1>
+      <p class="role">{SITE.role}</p>
+      <p class="org">{SITE.affiliation}, {SITE.location}</p>
+      <ul class="links">
+        {
+          SITE.links.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+        {SITE.email && <li><a href={`mailto:${SITE.email}`}>Email</a></li>}
+      </ul>
+    </div>
+  </div>
+
+  <section class="intro">
+    <p class="lede">{SITE.intro}</p>
+    <p>
+      She is a Science Foundation Ireland Funded Investigator, an IEEE Senior Member and a Board Member of the IEEE UK
+      and Ireland Future Networks Group. <a href={url('/biography/')}>Read her full biography</a>.
+    </p>
+  </section>
+
+  <section class="section" aria-labelledby="themes">
+    <div class="section-head">
+      <h2 id="themes">Research themes</h2>
+      <a href={url('/research/')}>More about the research</a>
+    </div>
+    <div class="grid">
+      {THEMES.map((theme) => <ThemeCard theme={theme} count={countFor(theme.id)} />)}
+    </div>
+  </section>
+
+  <div class="split section">
+    <section aria-labelledby="pubs">
+      <div class="section-head">
+        <h2 id="pubs">Recent publications</h2>
+        <a href={url('/publications/')}>All {PUBLICATIONS.length} publications</a>
+      </div>
+      <ul class="pubs">
+        {recent.map((pub) => <PubItem pub={pub} showYear />)}
+      </ul>
+      <p class="note">{papers} journal and conference papers since 2011, plus book chapters and preprints.</p>
+    </section>
+
+    <aside>
+      <section class="panel side" aria-labelledby="project">
+        <h2 id="project">Current project</h2>
+        <p class="side-title">{current.name}</p>
+        <p class="side-meta">{current.funder}, {current.period.toLowerCase()}</p>
+        <p>{current.summary}</p>
+        <a href={url('/research/#projects')}>All projects</a>
+      </section>
+
+      <section class="panel side" aria-labelledby="teaching">
+        <h2 id="teaching">Teaching</h2>
+        {
+          MODULES.map((m) => (
+            <>
+              <p class="side-title">{m.title}</p>
+              <p class="side-meta">{m.level} module, {m.facts.join(', ').toLowerCase()}</p>
+              {m.href && <a href={m.href}>{m.linkLabel ?? 'Course page'}</a>}
+            </>
+          ))
+        }
+      </section>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem 2rem;
+  }
+
+  .hero h1 {
+    margin: 0 0 0.5rem;
+    font-size: var(--step-4);
+    font-weight: 520;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--on-navy);
+  }
+
+  .role {
+    margin: 0;
+    font-size: var(--step-1);
+    color: var(--on-navy);
+  }
+
+  .org {
+    margin: 0.15rem 0 0;
+    color: var(--on-navy-muted);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .links a {
+    display: inline-block;
+    padding: 0.25rem 0.8rem;
+    border: 1px solid var(--navy-line);
+    border-radius: 999px;
+    color: var(--on-navy);
+    font-size: var(--step--1);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .links a:hover {
+    border-color: var(--signal);
+  }
+
+  .intro p {
+    margin: 0;
+    max-width: var(--measure);
+  }
+
+  .intro p + p {
+    margin-top: 1rem;
+    color: var(--muted);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: 1rem;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 20rem;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 60rem) {
+    .split {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .pubs {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .note {
+    margin: 0;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--rule);
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+
+  aside {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .side {
+    padding: 1.25rem;
+  }
+
+  .side h2 {
+    margin: 0 0 0.75rem;
+    font-size: var(--step-1);
+  }
+
+  .side p {
+    margin: 0 0 0.75rem;
+  }
+
+  .side-title {
+    font-weight: 650;
+    margin-bottom: 0.1rem !important;
+  }
+
+  .side-meta {
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+</style>
