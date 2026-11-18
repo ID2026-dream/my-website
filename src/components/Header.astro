@@ -1,0 +1,68 @@
+---
+import { SITE } from '../site.config';
+import { url } from '../utils';
+
+const nav = [
+  { label: 'Work', href: url('/projects/') },
+  { label: 'Writing', href: url('/blog/') },
+  { label: 'About', href: url('/about/') },
+];
+
+const here = Astro.url.pathname;
+const isCurrent = (href: string) => here === href || here.startsWith(href);
+---
+
+<header class="wrap">
+  <a class="home mark" href={url('/')}>{SITE.name}</a>
+  <nav aria-label="Main">
+    <ul>
+      {
+        nav.map((item) => (
+          <li>
+            <a class="mark" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<style>
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .home {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  ul {
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    color: var(--muted);
+  }
+
+  nav a:hover,
+  nav a[aria-current='page'] {
+    color: var(--ink);
+  }
+
+  nav a[aria-current='page'] {
+    background-size: 100% 0.45em;
+  }
+</style>

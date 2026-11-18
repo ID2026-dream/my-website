@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/content';
+import { url } from '../../utils';
+
+const posts = await getPosts();
+---
+
+<Base title="Writing" description="Notes, tutorials and things I’ve learned.">
+  <h1>Writing</h1>
+  <p class="lede">
+    Notes, tutorials and things I’ve learned. Follow along with <a class="mark" href={url('/rss.xml')}>RSS</a>.
+  </p>
+  <PostList posts={posts} />
+</Base>
+
+<style>
+  h1 {
+    margin: 0 0 0.5rem;
+    font-size: var(--step-3);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+  }
+
+  .lede {
+    margin: 0 0 2rem;
+    color: var(--muted);
+    font-size: var(--step-1);
+  }
+
+  .lede a {
+    color: var(--ink);
+  }
+</style>
