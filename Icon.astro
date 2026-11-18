@@ -1,0 +1,41 @@
+---
+// Simple line icons for the research themes. 24 × 24, drawn with the current text colour.
+interface Props {
+  name: string;
+  size?: number;
+}
+
+const { name, size = 24 } = Astro.props;
+
+const paths: Record<string, string> = {
+  // two crossing orbits around a nucleus
+  quantum:
+    '<ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/>',
+  // five nodes, meshed
+  network:
+    '<circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.6 7.2 10.4 10.8M17.4 7.2 13.6 10.8M10.4 13.2 6.6 16.8M13.6 13.2 17.4 16.8M7 6h10"/>',
+  // a sensor chip with radiating arcs
+  sensor:
+    '<rect x="8" y="10" width="8" height="8" rx="1.5"/><path d="M10 10V8M14 10V8M10 18v2M14 18v2"/><path d="M8.5 5.5a5 5 0 0 1 7 0M6 3a8.5 8.5 0 0 1 12 0"/>',
+  // a leaf
+  leaf: '<path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14"/><path d="M5 19 13 11"/>',
+  // a heartbeat trace
+  pulse: '<path d="M3 12h4l2-5 4 10 2-5h6"/>',
+  // a decaying wave
+  wave: '<path d="M2 12c1.5-6 3-6 4.5 0s3 6 4.5 0 2.5-4 3.5 0 2 3 3 0 1.5-2 2.5 0"/>',
+};
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+  set:html={paths[name] ?? ''}
+/>

@@ -1,0 +1,200 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import PubItem from '../components/PubItem.astro';
+import { THEMES } from '../data/themes';
+import { PUBLICATIONS } from '../data/publications';
+import { PROJECTS } from '../data/projects';
+import { url } from '../utils';
+
+// For each theme: three recent papers (journal articles first), and the total count.
+const rank = { journal: 0, conference: 1, chapter: 2, thesis: 3, preprint: 4 } as const;
+const themes = THEMES.map((theme) => {
+  const all = PUBLICATIONS.filter((p) => p.themes.includes(theme.id));
+  const examples = all
+    .filter((p) => p.type !== 'preprint' && !p.venue.endsWith('…'))
+    .sort((a, b) => b.year - a.year || rank[a.type] - rank[b.type])
+    .slice(0, 3);
+  return { theme, count: all.length, examples };
+});
+---
+
+<Base
+  title="Research"
+  heading="Research"
+  lede="Six connected themes, from the physics of the channel to the networks and applications built on it."
+>
+  <nav class="jump" aria-label="Themes on this page">
+    <ul>
+      {themes.map(({ theme }) => (
+        <li style={`--c:${theme.color}`}>
+          <a href={`#${theme.id}`}><Icon name={theme.icon} size={18} />{theme.title}</a>
+        </li>
+      ))}
+      <li style="--c: var(--ink)"><a href="#projects">Projects</a></li>
+    </ul>
+  </nav>
+
+  {themes.map(({ theme, count, examples }) => (
+    <section class="theme" id={theme.id} style={`--c:${theme.color}`} aria-labelledby={`${theme.id}-title`}>
+      <div class="theme-text">
+        <span class="icon"><Icon name={theme.icon} size={28} /></span>
+        <h2 id={`${theme.id}-title`}>{theme.title}</h2>
+        <p>{theme.description}</p>
+        <a class="all" href={url(`/publications/?theme=${theme.id}`)}>See all {count} publications</a>
+      </div>
+      <div>
+        <h3 class="visually-hidden">Selected papers</h3>
+        <ul class="pubs">
+          {examples.map((pub) => <PubItem pub={pub} showYear />)}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  <section id="projects" class="projects" aria-labelledby="projects-title">
+    <h2 id="projects-title">Projects and fellowships</h2>
+    <div class="project-list">
+      {PROJECTS.map((p) => (
+        <article class="panel project">
+          <h3>{p.name}</h3>
+          {p.fullName && <p class="full">{p.fullName}</p>}
+          <p class="meta">{p.funder}<br />{p.period}</p>
+          <p>{p.summary}</p>
+          {p.links?.map((l) => <a href={l.href}>{l.label}</a>)}
+        </article>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .jump ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .jump a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.8rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    color: var(--ink);
+    font-size: var(--step--1);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .jump a:hover {
+    border-color: var(--c);
+  }
+
+  .jump :global(svg) {
+    color: var(--c);
+  }
+
+  .theme {
+    display: grid;
+    grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+    gap: 1.5rem clamp(2rem, 5vw, 4rem);
+    padding-block: 2.5rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .theme:first-of-type {
+    border-top: 0;
+  }
+
+  @media (max-width: 56rem) {
+    .theme {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 10px;
+    color: var(--c);
+    background: color-mix(in srgb, var(--c) 11%, white);
+  }
+
+  .theme h2 {
+    margin: 0.9rem 0 0.6rem;
+    font-size: var(--step-2);
+  }
+
+  .theme-text p {
+    margin: 0 0 0.9rem;
+    color: var(--muted);
+  }
+
+  .all {
+    font-weight: 600;
+    color: var(--c);
+  }
+
+  .pubs {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pubs :global(.pub:first-child) {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .projects {
+    margin-top: 2rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .projects h2 {
+    margin: 0 0 1.25rem;
+    font-size: var(--step-2);
+  }
+
+  .project-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: 1rem;
+  }
+
+  .project {
+    padding: 1.25rem;
+  }
+
+  .project h3 {
+    margin: 0;
+    font-size: var(--step-1);
+  }
+
+  .project p {
+    margin: 0 0 0.75rem;
+  }
+
+  .full {
+    color: var(--muted);
+  }
+
+  .meta {
+    font-size: var(--step--1);
+    color: var(--muted);
+    margin-top: 0.5rem !important;
+  }
+
+  .project a {
+    font-weight: 600;
+  }
+</style>

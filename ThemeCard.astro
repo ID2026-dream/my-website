@@ -1,0 +1,66 @@
+---
+import Icon from './Icon.astro';
+import type { Theme } from '../data/themes';
+import { url } from '../utils';
+
+interface Props {
+  theme: Theme;
+  count: number;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { theme, count, headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
+const href = url(`/publications/?theme=${theme.id}`);
+---
+
+<article class="card" style={`--c:${theme.color}`}>
+  <span class="icon"><Icon name={theme.icon} /></span>
+  <Heading class="title">{theme.title}</Heading>
+  <p>{theme.summary}</p>
+  <a class="count" href={href}>{count} {count === 1 ? 'publication' : 'publications'}</a>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.25rem 1.25rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 4px solid var(--c);
+    border-radius: var(--radius);
+  }
+
+  .icon {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 8px;
+    color: var(--c);
+    background: color-mix(in srgb, var(--c) 11%, white);
+  }
+
+  .title {
+    margin: 0.25rem 0 0;
+    font-family: var(--sans);
+    font-size: 1.125rem;
+    font-weight: 650;
+    line-height: 1.25;
+  }
+
+  p {
+    margin: 0;
+    color: var(--muted);
+    flex: 1;
+  }
+
+  .count {
+    align-self: flex-start;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--c);
+  }
+</style>

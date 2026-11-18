@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import { GROUPS, TEAM } from '../data/team';
+import { url } from '../utils';
+
+const groups = GROUPS.map((g) => ({ name: g, people: TEAM.filter((m) => m.role === g) })).filter(
+  (g) => g.people.length > 0,
+);
+---
+
+<Base title="Team" heading="Team" lede="Researchers working with Dr Dey at Walton Institute.">
+  {
+    groups.length === 0 ? (
+      <p>The team listing is being updated.</p>
+    ) : (
+      groups.map((group) => (
+        <section class="group" aria-labelledby={group.name}>
+          <h2 id={group.name}>{group.name}</h2>
+          <ul>
+            {group.people.map((m) => (
+              <li>
+                {m.photo && <img src={url(`/${m.photo}`)} alt="" width="72" height="72" loading="lazy" />}
+                <div>
+                  <h3>{m.href ? <a href={m.href}>{m.name}</a> : m.name}</h3>
+                  {m.topic && <p class="topic">{m.topic}</p>}
+                  {m.bio && <p>{m.bio}</p>}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    )
+  }
+</Base>
+
+<style>
+  .group + .group {
+    margin-top: 3rem;
+  }
+
+  h2 {
+    margin: 0 0 0.5rem;
+    font-size: var(--step-2);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: flex;
+    gap: 1.25rem;
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: none;
+  }
+
+  h3 {
+    margin: 0 0 0.2rem;
+    font-size: var(--step-1);
+  }
+
+  p {
+    margin: 0;
+    max-width: var(--measure);
+  }
+
+  .topic {
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+</style>

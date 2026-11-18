@@ -1,0 +1,213 @@
+---
+import Base from '../layouts/Base.astro';
+import PubItem from '../components/PubItem.astro';
+import { PUBLICATIONS, TYPE_LABELS, type PubType } from '../data/publications';
+import { THEMES } from '../data/themes';
+
+const years = [...new Set(PUBLICATIONS.map((p) => p.year))].sort((a, b) => b - a);
+const types = Object.keys(TYPE_LABELS) as PubType[];
+const countType = (t: PubType) => PUBLICATIONS.filter((p) => p.type === t).length;
+---
+
+<Base
+  title="Publications"
+  heading="Publications"
+  lede={`${PUBLICATIONS.length} papers, chapters and preprints since 2011. Filter by type or by research theme.`}
+>
+  <form class="filters" aria-label="Filter publications" onsubmit="return false">
+    <fieldset>
+      <legend>Type</legend>
+      <div class="chips">
+        <label><input type="radio" name="type" value="all" checked /> All <span>{PUBLICATIONS.length}</span></label>
+        {types.map((t) => (
+          <label><input type="radio" name="type" value={t} /> {TYPE_LABELS[t]} <span>{countType(t)}</span></label>
+        ))}
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Theme</legend>
+      <select name="theme" aria-label="Research theme">
+        <option value="all">All themes</option>
+        {THEMES.map((t) => <option value={t.id}>{t.title}</option>)}
+      </select>
+    </fieldset>
+  </form>
+
+  <p class="status" aria-live="polite"></p>
+
+  <div class="years">
+    {years.map((year) => (
+      <section class="year" data-year={year} aria-labelledby={`y${year}`}>
+        <h2 id={`y${year}`}>{year}</h2>
+        <ul>
+          {PUBLICATIONS.filter((p) => p.year === year).map((pub) => <PubItem pub={pub} />)}
+        </ul>
+      </section>
+    ))}
+  </div>
+
+  <p class="source">
+    Also listed on <a href="https://orcid.org/0000-0001-9669-6417">ORCID</a>.
+  </p>
+</Base>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('.filters');
+  const status = document.querySelector<HTMLElement>('.status');
+  const items = [...document.querySelectorAll<HTMLElement>('.pub')];
+  const years = [...document.querySelectorAll<HTMLElement>('.year')];
+
+  function apply() {
+    if (!form) return;
+    const data = new FormData(form);
+    const type = String(data.get('type') ?? 'all');
+    const theme = String(data.get('theme') ?? 'all');
+    let shown = 0;
+    for (const item of items) {
+      const ok =
+        (type === 'all' || item.dataset.type === type) &&
+        (theme === 'all' || (item.dataset.themes ?? '').split(' ').includes(theme));
+      item.hidden = !ok;
+      if (ok) shown++;
+    }
+    for (const y of years) y.hidden = !y.querySelector('.pub:not([hidden])');
+    if (status) status.textContent = type === 'all' && theme === 'all' ? '' : `Showing ${shown} of ${items.length}.`;
+    const params = new URLSearchParams();
+    if (type !== 'all') params.set('type', type);
+    if (theme !== 'all') params.set('theme', theme);
+    const qs = params.toString();
+    history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+  }
+
+  // Start from ?type= and ?theme= in the address, so links from other pages land filtered.
+  const start = new URLSearchParams(location.search);
+  if (form) {
+    const t = start.get('type');
+    const th = start.get('theme');
+    if (t) form.querySelector<HTMLInputElement>(`input[name=type][value="${CSS.escape(t)}"]`)?.click();
+    if (th) (form.elements.namedItem('theme') as HTMLSelectElement).value = th;
+    form.addEventListener('change', apply);
+    apply();
+  }
+</script>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    align-items: end;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+  }
+
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+
+  legend {
+    margin-bottom: 0.5rem;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .chips label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-size: var(--step--1);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .chips span {
+    color: var(--muted);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .chips input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .chips label:has(input:checked) {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--on-navy);
+  }
+
+  .chips label:has(input:checked) span {
+    color: var(--on-navy-muted);
+  }
+
+  .chips label:has(input:focus-visible) {
+    outline: 2px solid var(--link);
+    outline-offset: 2px;
+  }
+
+  select {
+    font: inherit;
+    font-size: var(--step--1);
+    padding: 0.35rem 0.6rem;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--ink);
+    max-width: 100%;
+  }
+
+  .status {
+    min-height: 1.6em;
+    margin: 1rem 0 0;
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .year {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: 0 1.5rem;
+    padding-top: 1.5rem;
+  }
+
+  .year h2 {
+    margin: 0.75rem 0 0;
+    font-size: var(--step-2);
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .year ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 40rem) {
+    .year {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .source {
+    margin-top: 2.5rem;
+    color: var(--muted);
+  }
+</style>

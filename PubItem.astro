@@ -1,0 +1,61 @@
+---
+import { SELF, type Publication } from '../data/publications';
+
+interface Props {
+  pub: Publication;
+  showYear?: boolean;
+}
+
+const { pub, showYear = false } = Astro.props;
+---
+
+<li class="pub" data-type={pub.type} data-themes={pub.themes.join(' ')}>
+  <p class="title">
+    {pub.url ? <a href={pub.url}>{pub.title}</a> : pub.title}
+  </p>
+  <p class="authors">
+    {
+      pub.authors.map((name, i) => (
+        <>
+          {i > 0 && ', '}
+          {name === SELF ? <strong>{name}</strong> : name}
+        </>
+      ))
+    }
+  </p>
+  <p class="venue">
+    <em>{pub.venue}</em>{pub.details && `, ${pub.details}`}{showYear && `, ${pub.year}`}
+  </p>
+</li>
+
+<style>
+  .pub {
+    padding-block: 0.9rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  p {
+    margin: 0;
+    max-width: 52rem;
+  }
+
+  .title {
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .authors,
+  .venue {
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+
+  .authors strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .venue {
+    margin-top: 0.1rem;
+  }
+</style>

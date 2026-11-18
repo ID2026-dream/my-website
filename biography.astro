@@ -1,0 +1,161 @@
+---
+import Base from '../layouts/Base.astro';
+import { CAREER, EDUCATION, SERVICE, type Entry } from '../data/profile';
+---
+
+<Base
+  title="Biography"
+  heading="Biography"
+  lede="From indoor propagation models to autonomous networks and quantum communication."
+>
+  <div class="layout">
+    <div class="bio">
+      <p>
+        Dr Indrakshi Dey heads the Programmable Autonomous Systems (PAS) division at Walton Institute, South East
+        Technological University (SETU) in Waterford, Ireland. Her research covers propagation models, performance
+        bounds, data models, algorithm design, signal processing, novel optimisation techniques and predictive analytics
+        for AI-aided, cyber-physical, digital twin, IoT and Internet of Everything systems, across mobile, terrestrial,
+        space and quantum networks.
+      </p>
+      <p>
+        She is Principal Investigator on national, European, international and commercial projects, a Science
+        Foundation Ireland Funded Investigator with the CONNECT centre, an IEEE Senior Member and a Board Member of the
+        IEEE UK and Ireland Future Networks Group. She is also an expert reviewer of Marie Skłodowska-Curie applications
+        for Horizon Europe.
+      </p>
+      <p>
+        She received an MSc in Wireless Communications from the University of Southampton in 2010 and a PhD in
+        Electrical Engineering from the University of Calgary in 2015. Her doctoral research produced the first
+        generalised propagation model for mobility-constrained indoor wireless communications, accounting for fading and
+        shadowing in a non-Gaussian environment.
+      </p>
+      <p>
+        After postdoctoral work at Dalhousie University and a research fellowship at the Norwegian University of Science
+        and Technology, she was a Marie Skłodowska-Curie Fellow at Trinity College Dublin from 2017 to 2019. She has also
+        been an Assistant Professor in Electronic Engineering at Maynooth University and an Adjunct Assistant Professor at
+        Trinity College Dublin.
+      </p>
+    </div>
+
+    <aside class="facts">
+      <section aria-labelledby="career">
+        <h2 id="career">Career</h2>
+        <ol class="timeline">
+          {CAREER.map((e: Entry) => (
+            <li>
+              {e.when && <span class="when">{e.when}</span>}
+              <span class="what">{e.what}</span>
+              <span class="where">{e.where}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section aria-labelledby="education">
+        <h2 id="education">Education</h2>
+        <ol class="timeline">
+          {EDUCATION.map((e: Entry) => (
+            <li>
+              <span class="when">{e.when}</span>
+              <span class="what">{e.what}</span>
+              <span class="where">{e.where}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section aria-labelledby="service">
+        <h2 id="service">Roles and service</h2>
+        <ul class="service">
+          {SERVICE.map((s) => <li>{s}</li>)}
+        </ul>
+      </section>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  @media (max-width: 60rem) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .bio {
+    font-family: var(--display);
+    font-size: 1.25rem;
+    line-height: 1.65;
+  }
+
+  .bio p {
+    margin: 0 0 1.1em;
+  }
+
+  .facts {
+    display: grid;
+    gap: 2.25rem;
+  }
+
+  .facts h2 {
+    margin: 0 0 0.75rem;
+    font-size: var(--step-1);
+  }
+
+  .timeline,
+  .service {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .timeline li {
+    display: grid;
+    padding: 0.65rem 0 0.65rem 1rem;
+    border-left: 2px solid var(--rule);
+    position: relative;
+  }
+
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 1.05rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--link);
+  }
+
+  .when {
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--link);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .what {
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .where {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .service li {
+    padding-block: 0.5rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .service li:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+</style>

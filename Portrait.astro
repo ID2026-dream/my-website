@@ -1,0 +1,45 @@
+---
+import { SITE } from '../site.config';
+import { url } from '../utils';
+
+interface Props {
+  size?: number;
+}
+
+const { size = 128 } = Astro.props;
+const initials = SITE.name
+  .split(' ')
+  .map((part) => part[0])
+  .join('')
+  .slice(0, 2);
+---
+
+{
+  SITE.photo ? (
+    <img class="portrait" src={url(`/${SITE.photo}`)} alt={`Portrait of ${SITE.title}`} width={size} height={size} style={`--size:${size}px`} />
+  ) : (
+    <div class="portrait initials" style={`--size:${size}px`} aria-hidden="true">
+      {initials}
+    </div>
+  )
+}
+
+<style>
+  .portrait {
+    width: var(--size);
+    height: var(--size);
+    flex: none;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--signal);
+    background: var(--navy-line);
+  }
+
+  .initials {
+    display: grid;
+    place-items: center;
+    color: var(--on-navy);
+    font-family: var(--display);
+    font-size: calc(var(--size) * 0.36);
+  }
+</style>
