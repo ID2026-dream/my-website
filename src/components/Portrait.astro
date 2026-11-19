@@ -1,6 +1,8 @@
 ---
+// The portrait is imported from src/assets, so it is bundled with the site
+// and always published along with the pages.
+import photo from '../assets/photo.jpg';
 import { SITE } from '../site.config';
-import { url } from '../utils';
 
 interface Props {
   size?: number;
@@ -16,7 +18,7 @@ const initials = SITE.name
 
 {
   SITE.photo ? (
-    <img class="portrait" src={url(`/${SITE.photo}`)} alt={`Pencil-style portrait of ${SITE.title}`} width={size} height={size} style={`--size:${size}px`} />
+    <img class="portrait" src={photo.src} alt={`Portrait of ${SITE.title}`} width={size} height={size} style={`--size:${size}px`} />
   ) : (
     <div class="portrait initials" style={`--size:${size}px`} aria-hidden="true">
       {initials}
@@ -26,13 +28,14 @@ const initials = SITE.name
 
 <style>
   .portrait {
+    display: block;
     width: var(--size);
     height: var(--size);
     flex: none;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid var(--signal);
-    background: #faf8f6;
+    background: var(--navy-line);
   }
 
   .initials {

@@ -7,6 +7,7 @@ export interface NavItem {
   label: string;
   path: string;
   primary?: boolean;
+  feature?: boolean; // shown as a highlighted pill with the lab emblem
 }
 
 export const NAV_GROUPS: { heading: string; items: NavItem[] }[] = [
@@ -23,7 +24,7 @@ export const NAV_GROUPS: { heading: string; items: NavItem[] }[] = [
     items: [
       { label: 'Research', path: '/research/', primary: true },
       { label: 'Publications', path: '/publications/', primary: true },
-      { label: SITE.lab.name, path: '/lab/' },
+      { label: SITE.lab.name, path: '/lab/', primary: true, feature: true },
       { label: 'Supervision', path: '/supervision/' },
     ],
   },
@@ -31,7 +32,7 @@ export const NAV_GROUPS: { heading: string; items: NavItem[] }[] = [
     heading: 'Teaching and engagement',
     items: [
       { label: 'Teaching', path: '/teaching/', primary: true },
-      { label: 'Outreach', path: '/outreach/', primary: true },
+      { label: 'Outreach', path: '/outreach/' },
     ],
   },
   {

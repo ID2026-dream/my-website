@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Portrait from '../components/Portrait.astro';
+import PucaMark from '../components/PucaMark.astro';
 import ThemeCard from '../components/ThemeCard.astro';
 import PubItem from '../components/PubItem.astro';
 import { SITE } from '../site.config';
@@ -8,6 +9,7 @@ import { THEMES } from '../data/themes';
 import { PUBLICATIONS, PUB_STATS } from '../data/publications';
 import { PROJECTS } from '../data/projects';
 import { MODULES } from '../data/teaching';
+import { SUPERVISION_SUMMARY as SUM } from '../data/profile';
 import { url } from '../utils';
 
 const countFor = (id: string) => PUBLICATIONS.filter((p) => p.themes.includes(id as never)).length;
@@ -23,6 +25,9 @@ const leading = PROJECTS.filter((p) => p.role === 'Coordinator' || p.role?.start
       <p class="role">{SITE.role}</p>
       <p class="org">{SITE.affiliation}, {SITE.location}</p>
       <ul class="links">
+        <li>
+          <a class="lab-pill" href={url('/lab/')}><PucaMark size={22} />{SITE.lab.name}</a>
+        </li>
         {
           SITE.links.slice(0, 4).map((link) => (
             <li>
@@ -42,6 +47,27 @@ const leading = PROJECTS.filter((p) => p.role === 'Coordinator' || p.role?.start
       projects including the QUESTING doctoral network and Q-FENCE. Her work received the IEEE ICC 2026 Best Paper
       Award. <a href={url('/biography/')}>Read her full biography</a>.
     </p>
+  </section>
+
+  <section class="puca section" aria-labelledby="puca-title">
+    <div class="puca-art">
+      <PucaMark size={220} label={`${SITE.lab.name} emblem: a hare drawn as a network`} />
+    </div>
+    <div class="puca-text">
+      <h2 id="puca-title">{SITE.lab.name}</h2>
+      <p class="puca-tag">{SITE.lab.tagline}</p>
+      <p>
+        Dr Dey’s research group at SETU builds trustworthy, data-efficient AI for complex systems. Like the
+        shape-shifting púca of Irish folklore, our networks, protocols and AI platforms change form under stress but
+        keep doing their job.
+      </p>
+      <ul class="puca-facts">
+        <li><strong>{SUM.currentPhd}</strong> PhD students</li>
+        <li><strong>{SUM.currentPostdocs}</strong> postdoctoral fellows</li>
+        <li><strong>{THEMES.length}</strong> research themes</li>
+      </ul>
+      <a class="puca-cta" href={url('/lab/')}>Visit {SITE.lab.name}</a>
+    </div>
   </section>
 
   <section class="section" aria-labelledby="themes">
@@ -146,6 +172,105 @@ const leading = PROJECTS.filter((p) => p.role === 'Coordinator' || p.role?.start
 
   .links a:hover {
     border-color: var(--signal);
+  }
+
+  .lab-pill {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.2rem 0.85rem 0.2rem 0.45rem !important;
+    background: var(--signal);
+    border-color: var(--signal) !important;
+    color: var(--navy) !important;
+  }
+
+  .lab-pill:hover {
+    background: #8ae3db;
+  }
+
+  .lab-pill :global(.puca polygon) {
+    fill: var(--navy);
+  }
+
+  .puca {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 1.5rem clamp(2rem, 5vw, 4rem);
+    padding: clamp(1.75rem, 4vw, 3rem);
+    border-radius: 20px;
+    color: var(--on-navy);
+    background:
+      radial-gradient(circle at 18% 50%, color-mix(in srgb, var(--signal) 22%, transparent), transparent 16rem),
+      var(--navy);
+  }
+
+  @media (max-width: 44rem) {
+    .puca {
+      grid-template-columns: 1fr;
+      justify-items: start;
+    }
+
+    .puca-art :global(svg) {
+      width: 150px;
+      height: auto;
+    }
+  }
+
+  .puca h2 {
+    margin: 0;
+    font-size: var(--step-3);
+    color: var(--on-navy);
+  }
+
+  .puca-tag {
+    margin: 0.4rem 0 1rem;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: var(--step-1);
+    color: var(--signal);
+  }
+
+  .puca-text > p:not(.puca-tag) {
+    max-width: var(--measure);
+    margin: 0;
+    color: var(--on-navy-muted);
+  }
+
+  .puca-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin: 1.25rem 0 1.5rem;
+    padding: 0;
+    list-style: none;
+    color: var(--on-navy-muted);
+  }
+
+  .puca-facts strong {
+    font-family: var(--display);
+    font-size: var(--step-2);
+    font-weight: 520;
+    color: var(--on-navy);
+    margin-right: 0.3rem;
+  }
+
+  .puca-cta {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
+    background: var(--signal);
+    color: var(--navy);
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .puca-cta:hover {
+    background: #8ae3db;
+  }
+
+  .puca-cta:focus-visible {
+    outline-color: var(--signal);
   }
 
   .intro p {

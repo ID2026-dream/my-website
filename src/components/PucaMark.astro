@@ -1,0 +1,89 @@
+---
+// The Púca Lab emblem: a hare's head (one of the púca's many shapes in Irish
+// folklore) drawn as a network, with every facet a node-and-link triangle.
+// It hints at the lab's work: the same function, held by shifting structure.
+interface Props {
+  size?: number;
+  tone?: 'dark' | 'light'; // 'dark' for use on the navy band, 'light' on paper
+  label?: string;
+}
+
+const { size = 64, tone = 'dark', label } = Astro.props;
+
+// Vertices on a 64 × 64 grid.
+const P = {
+  A: [10.5, 3.5], // back ear tip
+  B: [19.5, 27], // ear base, back
+  C: [25, 24.5], // ear base, between ears
+  D: [30.5, 2], // front ear tip
+  E: [31.5, 24], // ear base, front
+  F: [41, 28.5], // brow
+  G: [53, 38.5], // nose
+  H: [48.5, 44.5], // mouth
+  I: [38.5, 48.5], // chin
+  J: [25.5, 52], // throat
+  K: [15, 42], // back of the head
+} as const;
+type V = keyof typeof P;
+
+// Facets and how strongly each is shaded (0–1).
+const FACETS: [V, V, V, number][] = [
+  ['A', 'B', 'C', 0.55],
+  ['D', 'C', 'E', 0.8],
+  ['B', 'E', 'F', 0.65],
+  ['B', 'C', 'E', 0.4],
+  ['B', 'F', 'K', 0.45],
+  ['K', 'F', 'I', 0.7],
+  ['F', 'G', 'H', 0.9],
+  ['F', 'H', 'I', 0.6],
+  ['K', 'I', 'J', 0.35],
+];
+
+const pt = (v: V) => P[v].join(',');
+const edges = new Set<string>();
+for (const [a, b, c] of FACETS) {
+  for (const [x, y] of [
+    [a, b],
+    [b, c],
+    [c, a],
+  ] as [V, V][]) {
+    edges.add([x, y].sort().join(''));
+  }
+}
+
+const fill = tone === 'dark' ? '#5fd3c9' : '#0f2340';
+const line = tone === 'dark' ? '#d9f5f2' : '#0f2340';
+const node = tone === 'dark' ? '#eef2f8' : '#0f2340';
+---
+
+<svg
+  class="puca"
+  width={size}
+  height={size}
+  viewBox="1 -1 62 58"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+>
+  {FACETS.map(([a, b, c, o]) => <polygon points={`${pt(a)} ${pt(b)} ${pt(c)}`} fill={fill} fill-opacity={o * 0.85} />)}
+  {
+    [...edges].map((e) => {
+      const [a, b] = [e[0] as V, e[1] as V];
+      return (
+        <line
+          x1={P[a][0]}
+          y1={P[a][1]}
+          x2={P[b][0]}
+          y2={P[b][1]}
+          stroke={line}
+          stroke-opacity="0.55"
+          stroke-width="0.8"
+        />
+      );
+    })
+  }
+  {size >= 48 && (Object.keys(P) as V[]).map((v) => <circle cx={P[v][0]} cy={P[v][1]} r="1.5" fill={node} />)}
+  <circle cx="39.5" cy="34" r="4.2" fill="#e9a23b" fill-opacity="0.3" />
+  <circle cx="39.5" cy="34" r="2.3" fill="#e9a23b" />
+</svg>

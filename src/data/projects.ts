@@ -5,6 +5,8 @@ export interface Project {
   fullName?: string;
   funder: string;
   role?: string;
+  icon: string; // an icon name from src/components/Icon.astro
+  color: string;
   period?: string;
   summary: string;
   links?: { label: string; href: string }[];
@@ -17,6 +19,8 @@ export const PORTFOLIO =
 export const PROJECTS: Project[] = [
   {
     name: 'QUESTING',
+    icon: 'cap',
+    color: '#6a4bc4',
     funder: 'Horizon Europe, MSCA Doctoral Network',
     role: 'Coordinator',
     summary:
@@ -24,6 +28,8 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'Q-FENCE',
+    icon: 'lock',
+    color: '#1f6bc2',
     funder: 'Horizon Europe',
     role: 'Coordinator',
     summary:
@@ -31,6 +37,8 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'ENACT',
+    icon: 'sun',
+    color: '#c2456b',
     fullName: 'Environmental Effect on Health Care and Wellbeing and Active Interventions',
     funder: 'Horizon Europe (HORIZON-HLTH-2024-ENVHLTH-02-06, grant 101157151)',
     role: 'Leads SETU’s contribution',
@@ -41,6 +49,8 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'COALESCE',
+    icon: 'bolt',
+    color: '#b86e0b',
     funder: 'Horizon Europe (€1.6M)',
     role: 'Coordinator',
     summary:
@@ -48,12 +58,16 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'GreenSphere',
+    icon: 'globe',
+    color: '#3f8a2e',
     funder: 'Enterprise Ireland Innovation Partnership',
     period: '2025',
     summary: 'A replicable model for small and medium-sized enterprises adopting energy-efficient AI.',
   },
   {
     name: 'CONNECT',
+    icon: 'nodes',
+    color: '#0b8783',
     fullName: 'Research Ireland Centre for Future Networks',
     funder: 'Research Ireland',
     role: 'Funded Investigator',

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ThemeCard from '../components/ThemeCard.astro';
+import PucaMark from '../components/PucaMark.astro';
 import { SITE } from '../site.config';
 import { THEMES } from '../data/themes';
 import { PUBLICATIONS } from '../data/publications';
@@ -11,7 +12,18 @@ const countFor = (id: string) => PUBLICATIONS.filter((p) => p.themes.includes(id
 const { lab } = SITE;
 ---
 
-<Base title={lab.name} heading={lab.name} lede={lab.tagline}>
+<Base title={lab.name} description={`${lab.name}: ${lab.tagline} Dr Indrakshi Dey’s research group at South East Technological University.`}>
+  <div slot="hero" class="lab-hero">
+    <div>
+      <h1>{lab.name}</h1>
+      <p class="tag">{lab.tagline}</p>
+      <p class="sub">Dr Indrakshi Dey’s research group, South East Technological University</p>
+    </div>
+    <div class="emblem">
+      <PucaMark size={240} label={`${lab.name} emblem: a hare drawn as a network`} />
+    </div>
+  </div>
+
   <section class="intro">
     <p class="lede">
       {lab.name} is Dr Indrakshi Dey’s research group in the Department of Computing and Mathematics at South East
@@ -68,6 +80,56 @@ const { lab } = SITE;
 </Base>
 
 <style>
+  .lab-hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+
+  .lab-hero h1 {
+    margin: 0;
+    font-size: var(--step-4);
+    font-weight: 520;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--on-navy);
+  }
+
+  .tag {
+    margin: 0.75rem 0 0;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: var(--step-2);
+    color: var(--signal);
+  }
+
+  .sub {
+    margin: 0.5rem 0 0;
+    color: var(--on-navy-muted);
+  }
+
+  .emblem {
+    display: grid;
+    place-items: center;
+    width: 17rem;
+    height: 14rem;
+    background: radial-gradient(circle, color-mix(in srgb, var(--signal) 20%, transparent), transparent 68%);
+  }
+
+  @media (max-width: 44rem) {
+    .emblem {
+      width: 12rem;
+      height: 10rem;
+    }
+
+    .emblem :global(svg) {
+      width: 160px;
+      height: auto;
+    }
+  }
+
   .intro p {
     margin: 0;
     max-width: var(--measure);

@@ -14,9 +14,9 @@ export const SITE = {
   intro:
     'Indrakshi builds trustworthy, data-efficient artificial intelligence platforms for complex systems, from networks to human health. Her work sits at the intersection of wireless communications, dynamical systems and number theory.',
 
-  // The portrait in public/. 'portrait-sketch.jpg' is the pencil-style version;
-  // set this to 'photo.jpg' to use the original photo, or '' to show initials.
-  photo: 'portrait-sketch.jpg',
+  // Your portrait is src/assets/photo.jpg. To change it, replace that file with
+  // another square photo of the same name. Set this to false to show initials instead.
+  photo: true,
 
   // Leave empty to hide.
   email: 'indrakshi.dey@setu.ie',

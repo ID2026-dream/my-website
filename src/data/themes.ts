@@ -47,7 +47,7 @@ export const THEMES: Theme[] = [
     description:
       'Application-adaptive light-weight deep learning for edge intelligence, Koopman-operator analysis that certifies collective reasoning in multi-agent AI systems, agent-based models of farm decarbonisation calibrated on empirical data, and edge-to-cloud computing for software-defined energy networks.',
     color: '#3f8a2e',
-    icon: 'leaf',
+    icon: 'shield',
   },
   {
     id: 'health',
