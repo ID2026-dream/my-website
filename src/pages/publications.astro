@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PubItem from '../components/PubItem.astro';
-import { PUBLICATIONS, PUB_STATS, TYPE_LABELS, type PubType } from '../data/publications';
+import { PUBLICATIONS, PUB_STATS, SCHOLAR, TYPE_LABELS, type PubType } from '../data/publications';
 import { SITE } from '../site.config';
 import { THEMES } from '../data/themes';
 
@@ -21,7 +21,7 @@ const countType = (t: PubType) => PUBLICATIONS.filter((p) => p.type === t).lengt
     <ul>
       {PUB_STATS.map((st) => (
         <li>
-          <strong>{st.value}</strong>
+          <strong data-count={st.value}>{st.value}</strong>
           <span>{st.label}{st.note && <small>{st.note}</small>}</span>
         </li>
       ))}
@@ -29,7 +29,8 @@ const countType = (t: PubType) => PUBLICATIONS.filter((p) => p.type === t).lengt
     <p>
       Published in venues including Nature Portfolio’s Scientific Reports, IEEE Wireless Communications, IEEE
       Transactions on Wireless Communications, IEEE Internet of Things Journal and IEEE Transactions on Communications.
-      The list below is a selection of {PUBLICATIONS.length} items; the complete record is on{' '}
+      Google Scholar h-index {SCHOLAR.hIndex}, i10-index {SCHOLAR.i10Index}. The list below is a selection
+      of {PUBLICATIONS.length} items; the complete record is on{' '}
       <a href="https://scholar.google.com/citations?user=gVfaHKwAAAAJ">Google Scholar</a> and{' '}
       <a href="https://research.setu.ie/en/persons/indrakshi-dey/">SETU Pure</a>.
     </p>
@@ -130,6 +131,7 @@ const countType = (t: PubType) => PUBLICATIONS.filter((p) => p.type === t).lengt
 
   .record li {
     display: grid;
+    align-content: start;
     gap: 0.1rem;
   }
 

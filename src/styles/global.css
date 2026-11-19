@@ -149,6 +149,129 @@ a:hover {
   border-radius: var(--radius);
 }
 
+
+/* ------------------------------------------------------------------
+   Icon animation
+   Each moving part of an icon has a data-p name. Icons play once when
+   they scroll into view (.play), loop while their card is hovered or
+   focused (.hover-anim), and loop all the time when marked .live.
+   ------------------------------------------------------------------ */
+.ico [data-p] {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.ico [data-p='swing'] {
+  transform-origin: 50% 0;
+}
+
+.ico [data-p='flow'] {
+  stroke-dasharray: 3 3;
+}
+
+.ico [data-p='trace'] {
+  /* a short thick dash that travels along the line; hidden at rest */
+  stroke-dasharray: 0.14 1;
+  stroke-dashoffset: 0.14;
+}
+
+[data-p='orbit'] { --anim: ico-spin 9s linear; }
+[data-p='spin'] { --anim: ico-spin 16s linear; }
+[data-p='glow'] { --anim: ico-glow 2.6s ease-in-out; }
+[data-p='core'] { --anim: ico-pulse 2.2s ease-in-out; }
+[data-p='blink'] { --anim: ico-blink 2.2s ease-in-out; }
+[data-p='w1'] { --anim: ico-wave 1.8s ease-out; }
+[data-p='w2'] { --anim: ico-wave 1.8s ease-out 0.3s; }
+[data-p='beat'] { --anim: ico-beat 1.4s ease-in-out; }
+[data-p='trace'] { --anim: ico-trace 2s linear; }
+[data-p='flow'] { --anim: ico-flow 1.2s linear; }
+[data-p='rise'] { --anim: ico-rise 2.4s ease-in; }
+[data-p='rise2'] { --anim: ico-rise 2.4s ease-in 0.8s; }
+[data-p='rise3'] { --anim: ico-rise 2.4s ease-in 1.5s; }
+[data-p='swing'] { --anim: ico-swing 2.4s ease-in-out; }
+[data-p='twinkle'] { --anim: ico-twinkle 2.4s ease-in-out; }
+[data-p='flash'] { --anim: ico-flash 2.4s ease-in-out; }
+[data-p='globe'] { --anim: ico-globe 3.6s ease-in-out; }
+[data-p='bob'] { --anim: ico-bob 2.4s ease-in-out; }
+[data-p='bob2'] { --anim: ico-bob 2.4s ease-in-out 0.4s; }
+[data-p='lift'] { --anim: ico-lift 2.4s ease-in-out; }
+[data-p='drift'] { --anim: ico-drift 4s ease-in-out; }
+
+.ico.play [data-p] {
+  animation: var(--anim) 1;
+}
+
+.ico.live [data-p],
+.hover-anim:hover .ico [data-p],
+.hover-anim:focus-visible .ico [data-p] {
+  animation: var(--anim) infinite;
+}
+
+@keyframes ico-spin { to { transform: rotate(360deg); } }
+@keyframes ico-glow { 50% { transform: scale(1.35); opacity: 0.4; } }
+@keyframes ico-pulse { 50% { transform: scale(1.28); } }
+@keyframes ico-blink { 50% { opacity: 0.3; } }
+@keyframes ico-wave { 35% { opacity: 0.1; } }
+@keyframes ico-beat {
+  15% { transform: scale(1.09); }
+  25% { transform: scale(1); }
+  35% { transform: scale(1.05); }
+  50% { transform: scale(1); }
+}
+@keyframes ico-trace { to { stroke-dashoffset: -1; } }
+@keyframes ico-flow { to { stroke-dashoffset: -12; } }
+@keyframes ico-rise {
+  70% { transform: translateY(-9px); opacity: 0; }
+  71% { transform: translateY(3px); opacity: 0; }
+}
+@keyframes ico-swing {
+  25% { transform: rotate(14deg); }
+  75% { transform: rotate(-14deg); }
+}
+@keyframes ico-twinkle { 50% { transform: scale(1.3) rotate(36deg); } }
+@keyframes ico-flash {
+  40% { opacity: 0.25; }
+  50% { opacity: 1; }
+  60% { opacity: 0.5; }
+  70% { opacity: 1; }
+}
+@keyframes ico-globe { 50% { transform: scaleX(2.15); } }
+@keyframes ico-bob { 50% { transform: translateY(-2.5px); } }
+@keyframes ico-lift { 50% { transform: translateY(-3px); } }
+@keyframes ico-drift { 50% { transform: translateX(-2.5px); } }
+
+/* ---- The Púca emblem: the eye blinks, the network twinkles ---- */
+.puca .eye,
+.puca .eye-glow {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.puca .eye {
+  animation: puca-blink 6s ease-in-out infinite;
+}
+
+.puca .eye-glow {
+  animation: puca-glow 3.2s ease-in-out infinite;
+}
+
+.puca .node {
+  animation: puca-twinkle 4.8s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -0.45s);
+}
+
+@keyframes puca-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  94% { transform: scaleY(0.1); }
+}
+@keyframes puca-glow { 50% { transform: scale(1.7); opacity: 0.15; } }
+@keyframes puca-twinkle { 50% { opacity: 0.3; } }
+
+/* ---- Numbers that count up when they come into view ---- */
+[data-count] {
+  font-variant-numeric: tabular-nums;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;

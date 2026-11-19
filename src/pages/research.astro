@@ -29,7 +29,7 @@ const themes = THEMES.map((theme) => {
     <ul>
       {themes.map(({ theme }) => (
         <li style={`--c:${theme.color}`}>
-          <a href={`#${theme.id}`}><Icon name={theme.icon} size={18} />{theme.title}</a>
+          <a href={`#${theme.id}`}><Icon name={theme.icon} size={18} animate="none" />{theme.title}</a>
         </li>
       ))}
       <li style="--c: var(--ink)"><a href="#projects">Projects</a></li>
@@ -39,7 +39,7 @@ const themes = THEMES.map((theme) => {
   {themes.map(({ theme, count, examples }) => (
     <section class="theme" id={theme.id} style={`--c:${theme.color}`} aria-labelledby={`${theme.id}-title`}>
       <div class="theme-text">
-        <span class="icon" style={`--icon-accent:${theme.color === '#b86e0b' ? '#0b8783' : '#e9a23b'}`}><Icon name={theme.icon} size={52} /></span>
+        <span class="icon hover-anim" style={`--icon-accent:${theme.color === '#b86e0b' ? '#0b8783' : '#e9a23b'}`}><Icon name={theme.icon} size={52} /></span>
         <h2 id={`${theme.id}-title`}>{theme.title}</h2>
         <p>{theme.description}</p>
         <a class="all" href={url(`/publications/?theme=${theme.id}`)}>See all {count} publications</a>
@@ -58,7 +58,7 @@ const themes = THEMES.map((theme) => {
     <p class="portfolio">{PORTFOLIO}</p>
     <div class="project-list">
       {PROJECTS.map((p) => (
-        <article class="panel project" style={`--c:${p.color};--icon-accent:${p.color === '#b86e0b' ? '#0b8783' : '#e9a23b'}`}>
+        <article class="panel project hover-anim" style={`--c:${p.color};--icon-accent:${p.color === '#b86e0b' ? '#0b8783' : '#e9a23b'}`}>
           <span class="picon"><Icon name={p.icon} size={44} /></span>
           <h3>{p.name}</h3>
           {p.fullName && <p class="full">{p.fullName}</p>}

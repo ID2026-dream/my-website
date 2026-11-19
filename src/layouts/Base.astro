@@ -100,7 +100,7 @@ const isHere = (href: string) => here === href.split('#')[0];
           <div class="page-head">
             {icon && (
               <span class:list={['page-icon', { mark: icon === 'puca' }]}>
-                {icon === 'puca' ? <PucaMark size={88} /> : <Icon name={icon} size={52} />}
+                {icon === 'puca' ? <PucaMark size={88} /> : <Icon name={icon} size={52} animate="live" />}
               </span>
             )}
             <div>
@@ -159,6 +159,43 @@ const isHere = (href: string) => here === href.split('#')[0];
         }
       });
       panel?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+
+      // Motion: play icons once as they scroll into view, and count numbers up.
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!still && 'IntersectionObserver' in window) {
+        const reveal = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (!e.isIntersecting) continue;
+              e.target.classList.add('play');
+              reveal.unobserve(e.target);
+            }
+          },
+          { threshold: 0.6 },
+        );
+        document.querySelectorAll('.ico[data-reveal]').forEach((el) => reveal.observe(el));
+
+        const counter = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (!e.isIntersecting) continue;
+              counter.unobserve(e.target);
+              const el = e.target as HTMLElement;
+              const end = Number(el.dataset.count);
+              const start = performance.now();
+              const tick = (now: number) => {
+                const t = Math.min(1, (now - start) / 1100);
+                el.textContent = String(Math.round(end * (1 - Math.pow(1 - t, 3))));
+                if (t < 1) requestAnimationFrame(tick);
+              };
+              el.textContent = '0';
+              requestAnimationFrame(tick);
+            }
+          },
+          { threshold: 0.8 },
+        );
+        document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => counter.observe(el));
+      }
     </script>
   </body>
 </html>

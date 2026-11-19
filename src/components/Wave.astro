@@ -1,13 +1,14 @@
 ---
-// An amplitude-modulated carrier: a quiet nod to signals and propagation.
-// Drawn once at build time, so it costs nothing in the browser.
+// An amplitude-modulated carrier drifting across the header, like a signal
+// in flight. Each wave repeats exactly every W units, so it can scroll forever
+// without a visible seam. Drawn at build time; the motion is pure CSS.
 const W = 1200;
 const H = 90;
 const mid = H / 2;
 
 function wave(carrier: number, envelope: number, phase: number, amp: number) {
   const pts: string[] = [];
-  for (let x = 0; x <= W; x += 2) {
+  for (let x = 0; x <= 2 * W; x += 2) {
     const env = 0.25 + 0.75 * Math.abs(Math.sin((x / W) * Math.PI * envelope + phase));
     const y = mid + amp * env * Math.sin((x / W) * Math.PI * 2 * carrier + phase * 3);
     pts.push(`${x},${y.toFixed(2)}`);
@@ -15,13 +16,14 @@ function wave(carrier: number, envelope: number, phase: number, amp: number) {
   return `M${pts.join(' L')}`;
 }
 
-const main = wave(30, 2.2, 0.3, 30);
-const echo = wave(17, 1.4, 1.1, 22);
+// integer carrier and envelope counts keep both waves periodic in W
+const main = wave(30, 2, 0.3, 30);
+const echo = wave(17, 1, 1.1, 22);
 ---
 
 <svg class="wave" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
-  <path d={echo} class="echo" />
-  <path d={main} class="main" />
+  <g class="drift slow"><path d={echo} class="echo" /></g>
+  <g class="drift"><path d={main} class="main" /></g>
 </svg>
 
 <style>
@@ -29,6 +31,7 @@ const echo = wave(17, 1.4, 1.1, 22);
     display: block;
     width: 100%;
     height: 72px;
+    overflow: hidden;
   }
 
   path {
@@ -46,5 +49,19 @@ const echo = wave(17, 1.4, 1.1, 22);
     stroke: var(--on-navy-muted);
     stroke-width: 1;
     opacity: 0.35;
+  }
+
+  .drift {
+    animation: drift 18s linear infinite;
+  }
+
+  .drift.slow {
+    animation-duration: 34s;
+  }
+
+  @keyframes drift {
+    to {
+      transform: translateX(-1200px);
+    }
   }
 </style>

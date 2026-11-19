@@ -13,9 +13,9 @@ const degrees = [...new Set(SUPERVISION.map((s) => s.degree))];
 >
   <section class="summary panel" aria-label="Supervision at a glance">
     <ul>
-      <li><strong>{SUM.currentPhd}</strong> current PhD students</li>
-      <li><strong>{SUM.currentPostdocs}</strong> postdoctoral fellows</li>
-      <li><strong>{SUM.graduatedPhd}</strong> PhD graduates</li>
+      <li><strong data-count={SUM.currentPhd}>{SUM.currentPhd}</strong> current PhD students</li>
+      <li><strong data-count={SUM.currentPostdocs}>{SUM.currentPostdocs}</strong> postdoctoral fellows</li>
+      <li><strong data-count={SUM.graduatedPhd}>{SUM.graduatedPhd}</strong> PhD graduates</li>
     </ul>
     <p>{SUM.note} {SUM.topics}</p>
   </section>

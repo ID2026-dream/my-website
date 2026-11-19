@@ -12,14 +12,19 @@ export interface Entry {
 // ---- Career to date (newest first) -------------------------------------
 export const CAREER: Entry[] = [
   {
-    when: '2023–present',
+    when: '2026–present',
     what: 'Lecturer in Computer Science',
     where: 'Department of Computing and Mathematics, School of Science, South East Technological University',
   },
   {
+    when: '2023–2026',
+    what: 'Head of the Programmable Autonomous Systems (PAS) Division',
+    where: 'Walton Institute, South East Technological University',
+  },
+  {
     when: '2022–present',
     what: 'Funded Investigator',
-    where: 'CONNECT, Research Ireland Centre for Future Networks',
+    where: 'CONNECT, the Taighde Éireann – Research Ireland Centre for Future Networks and Communications',
   },
   {
     when: '2019–present',
@@ -28,8 +33,8 @@ export const CAREER: Entry[] = [
   },
   {
     when: '2019–2022',
-    what: 'Lecturer (Assistant Professor)',
-    where: 'Maynooth University',
+    what: 'Lecturer / Assistant Professor',
+    where: 'National University of Ireland, Maynooth',
   },
   {
     when: '2017–2019',
@@ -73,7 +78,7 @@ export const AWARDS: Entry[] = [
   },
   { when: '2020–2021', what: 'SSHN Grant', where: 'CentraleSupélec, Rennes, France' },
   {
-    when: '2017–2019',
+    when: '2017–2020',
     what: 'Marie Skłodowska-Curie EDGE Fellowship',
     where: 'Trinity College Dublin, Ireland',
   },
@@ -97,17 +102,20 @@ export const AWARDS: Entry[] = [
   { when: '2008–2010', what: 'MSc Student Scholarship', where: 'University of Southampton, UK' },
 ];
 
-export const PATENTS = {
-  count: 3,
-  areas: 'full-duplexing, quantum AI and edge computing',
-};
+export const PATENTS = { count: 1 };
 
 // ---- Service ------------------------------------------------------------
 export const SERVICE_INSTITUTION: Entry[] = [
   {
+    when: '2023–2026',
+    what: 'Head of the Programmable Autonomous Systems (PAS) Division',
+    where: 'Walton Institute, South East Technological University',
+    note: 'Built and led a team of 21 technical leads, senior research fellows, postdoctoral fellows and PhD candidates, with a research agenda spanning data spaces, edge–cloud computing and network tomography.',
+  },
+  {
     when: '',
-    what: 'Coordinator of SETU-led European consortia',
-    where: 'QUESTING (MSCA Doctoral Network), Q-FENCE and COALESCE (Horizon Europe)',
+    what: 'Coordinator and Principal Investigator of European projects',
+    where: 'Coordinator of QUESTING (MSCA Doctoral Network) and COALESCE; Principal Investigator on Q-FENCE (Horizon Europe)',
   },
 ];
 
@@ -187,6 +195,12 @@ export const TALKS: Entry[] = [
     where: 'Trinity College Dublin',
     note: 'Error control coding: a bird’s-eye view.',
   },
+  {
+    when: 'September 2018',
+    what: 'Conference presentations, IEEE PIMRC 2018',
+    where: 'IEEE International Symposium on Personal, Indoor and Mobile Radio Communications',
+    note: 'Compact full-duplex amplify-and-forward relay design for 5G applications; combined rate and power adaptation for indoor wireless environments.',
+  },
 ];
 
 // ---- Outreach and media (newest first) ----------------------------------
@@ -194,7 +208,7 @@ export const OUTREACH: Entry[] = [
   {
     when: 'June 2025',
     what: 'CodeGirl and the Conversation: Women in Computing',
-    where: 'Panel discussion, The Machine podcast, SETU',
+    where: 'CodeGirl panel series, The Machine podcast, SETU',
     note: 'A live-recorded panel after a screening of the CodeGirl documentary at SETU Waterford, for secondary school students exploring pathways into computing.',
     href: 'https://podcasts.setu.ie/?p=4912',
   },
@@ -211,6 +225,12 @@ export const OUTREACH: Entry[] = [
     where: 'Guest, The Machine podcast, SETU',
     note: 'How research in autonomous systems is progressing, why people tend to anthropomorphise AI, and her career to date.',
     href: 'https://setu.ie/news/podcast-9plus-autonomous-systems-amp-ai-with-dr-indrakshi-dey',
+  },
+  {
+    when: '',
+    what: 'Recurring features in Silicon Republic',
+    where: 'Ireland’s technology news site',
+    note: 'On US–Ireland research collaboration, the resilience future wireless networks will need, and leadership in defining next-generation standards.',
   },
   {
     when: '',

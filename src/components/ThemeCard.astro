@@ -14,7 +14,7 @@ const href = url(`/publications/?theme=${theme.id}`);
 const accent = theme.color === '#b86e0b' ? '#0b8783' : '#e9a23b';
 ---
 
-<a class="card" href={href} style={`--c:${theme.color};--icon-accent:${accent}`}>
+<a class="card hover-anim" href={href} style={`--c:${theme.color};--icon-accent:${accent}`}>
   <span class="art"><Icon name={theme.icon} size={64} /></span>
   <span class="body">
     <span class="title">{theme.title}</span>

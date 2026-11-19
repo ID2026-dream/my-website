@@ -46,8 +46,7 @@ export const PUBLICATIONS: Publication[] = [
     venue: 'Discover Artificial Intelligence' },
   { year: 2026, type: 'journal', themes: ['networks'], authors: [ME, MH, 'Sayanti Ghosh', NM],
     title: 'Degeneracy-Aware Robustness Metrics for Heterogeneous Wireless Networks',
-    venue: 'IEEE Wireless Communications Letters', details: 'accepted',
-    url: 'https://arxiv.org/abs/2506.19974' },
+    venue: 'IEEE Wireless Communications Letters', details: 'accepted' },
   { year: 2026, type: 'journal', themes: ['networks'], authors: ['Debjani Goswami', ME, NM, 'Suvra Sekhar Das'],
     title: 'Distributed Time Synchronization in NOMA-Assisted Ultra-Dense Networks',
     venue: 'IEEE Transactions on Emerging Topics in Computing', details: 'vol. 14, no. 1, pp. 222–239',
@@ -61,7 +60,7 @@ export const PUBLICATIONS: Publication[] = [
     venue: 'IEEE Networking Letters' },
   { year: 2026, type: 'conference', themes: ['iot'], authors: ['Nirmal D. Wickramasinghe', ME, 'Dirk Pesch', 'John Dooley'],
     title: 'Epistemology-Inspired Bayesian Games for Distributed IoT Uplink Power Control',
-    venue: 'IEEE International Conference on Communications (ICC)' },
+    venue: 'IEEE International Conference on Communications (ICC)', url: 'https://arxiv.org/abs/2510.17870' },
   { year: 2026, type: 'conference', themes: ['quantum'],
     authors: ['Athira Kalavampara Raghunadhan', 'Matheus Guedes de Andrade', 'Don Towsley', ME, 'Daniel C. Kilper', NM],
     title: 'Measurement Strategies and Estimation Precision in Quantum Network Tomography',
@@ -126,6 +125,9 @@ export const PUBLICATIONS: Publication[] = [
     title: 'Edge-to-Cloud Computations-as-a-Service in Software-Defined Energy Networks for Smart Grids',
     venue: 'arXiv preprint', details: 'under revision, IEEE Transactions on Parallel and Distributed Systems',
     url: 'https://arxiv.org/abs/2510.11286' },
+  { year: 2025, type: 'preprint', themes: ['networks'], authors: [ME, NM],
+    title: 'Notes on Degeneracy and Robustness',
+    venue: 'arXiv preprint', details: 'monograph', url: 'https://arxiv.org/abs/2506.19974' },
   { year: 2025, type: 'preprint', themes: ['networks'], authors: ['Sihem Bakri', ME, 'Harun Siljak', 'Marco Ruffini', NM],
     title: 'Mitigating xApp conflicts for efficient network slicing in 6G O-RAN: a graph convolutional-based attention network approach',
     venue: 'arXiv preprint' },
@@ -166,7 +168,7 @@ export const PUBLICATIONS: Publication[] = [
     venue: 'arXiv preprint' },
   { year: 2024, type: 'preprint', themes: ['edge'], authors: ['Darren Leniston', 'David Ryan', 'Ciaran Malone', ME],
     title: 'A Distributed Edge FLISR Solution & Network Simulation Test Platform',
-    venue: 'arXiv preprint' },
+    venue: 'Authorea preprint', url: 'https://doi.org/10.22541/au.174262726.68286592' },
 
   // 2023
   { year: 2023, type: 'journal', themes: ['iot'], authors: [ME, NM],
@@ -324,11 +326,14 @@ export const TYPE_LABELS: Record<PubType, string> = {
 
 export const SELF = ME;
 
-// Totals from Dr Dey's CV (November 2026), shown on the Publications page.
+// Totals from Dr Dey's CV (ERC submission, November 2026), shown on the Publications page.
 export const PUB_STATS = [
-  { value: 45, label: 'journal papers', note: '26 as first author' },
-  { value: 36, label: 'conference papers', note: '16 as first author' },
+  { value: 35, label: 'journal papers', note: '22 as first author' },
+  { value: 22, label: 'conference papers', note: '16 as first author' },
   { value: 4, label: 'research monographs' },
   { value: 7, label: 'book chapters' },
   { value: 2, label: 'contracted single-author books' },
 ];
+
+// Citation indices from Google Scholar, as given in Dr Dey's CV (November 2026).
+export const SCHOLAR = { hIndex: 14, i10Index: 21 };

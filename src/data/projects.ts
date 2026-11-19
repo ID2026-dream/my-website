@@ -14,14 +14,14 @@ export interface Project {
 
 // Shown above the project list.
 export const PORTFOLIO =
-  'Dr Dey currently leads or co-leads 6 Horizon Europe grants (including an MSCA Doctoral Network and an MSCA Staff Exchange), 6 Research Ireland grants, 2 Enterprise Ireland grants and 3 Higher Education Authority grants.';
+  'Dr Dey is currently Coordinator or Principal Investigator on 6 Horizon Europe grants (including an MSCA Doctoral Network and an MSCA Staff Exchange), 6 Research Ireland grants, 2 Enterprise Ireland grants and 3 Higher Education Authority grants.';
 
 export const PROJECTS: Project[] = [
   {
     name: 'QUESTING',
     icon: 'cap',
     color: '#6a4bc4',
-    funder: 'Horizon Europe, MSCA Doctoral Network',
+    funder: 'Horizon Europe, MSCA Doctoral Network (€4.5M)',
     role: 'Coordinator',
     summary:
       'Trains 15 PhD researchers with nine universities and 13 industry partners, including Airbus Defence and Space, BT and Telecom Italia, and aims to set a European standard for doctoral training.',
@@ -30,8 +30,8 @@ export const PROJECTS: Project[] = [
     name: 'Q-FENCE',
     icon: 'lock',
     color: '#1f6bc2',
-    funder: 'Horizon Europe',
-    role: 'Coordinator',
+    funder: 'Horizon Europe (€7.5M)',
+    role: 'Principal Investigator',
     summary:
       'Delivers quantum-safe encryption for financial institutions, healthcare providers and government agencies ahead of the EU 2030 deadline, with 12 academic and industry partners.',
   },
@@ -68,7 +68,7 @@ export const PROJECTS: Project[] = [
     name: 'CONNECT',
     icon: 'nodes',
     color: '#0b8783',
-    fullName: 'Research Ireland Centre for Future Networks',
+    fullName: 'Taighde Éireann – Research Ireland Centre for Future Networks and Communications',
     funder: 'Research Ireland',
     role: 'Funded Investigator',
     period: '2022 to present',

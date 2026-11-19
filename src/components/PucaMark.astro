@@ -83,7 +83,12 @@ const node = tone === 'dark' ? '#eef2f8' : '#0f2340';
       );
     })
   }
-  {size >= 48 && (Object.keys(P) as V[]).map((v) => <circle cx={P[v][0]} cy={P[v][1]} r="1.5" fill={node} />)}
-  <circle cx="39.5" cy="34" r="4.2" fill="#e9a23b" fill-opacity="0.3" />
-  <circle cx="39.5" cy="34" r="2.3" fill="#e9a23b" />
+  {
+    size >= 48 &&
+      (Object.keys(P) as V[]).map((v, i) => (
+        <circle class="node" style={`--i:${i}`} cx={P[v][0]} cy={P[v][1]} r="1.5" fill={node} />
+      ))
+  }
+  <circle class="eye-glow" cx="39.5" cy="34" r="4.2" fill="#e9a23b" fill-opacity="0.3" />
+  <circle class="eye" cx="39.5" cy="34" r="2.3" fill="#e9a23b" />
 </svg>

@@ -14,7 +14,7 @@ import { AWARDS, PATENTS } from '../data/profile';
 
   <section class="section" aria-labelledby="patents">
     <h2 id="patents">Patents</h2>
-    <p>{PATENTS.count} granted patents, in {PATENTS.areas}.</p>
+    <p>{PATENTS.count === 1 ? 'One granted patent.' : `${PATENTS.count} granted patents.`}</p>
   </section>
 </Base>
 
