@@ -4,7 +4,7 @@ import Icon from '../components/Icon.astro';
 import PubItem from '../components/PubItem.astro';
 import { THEMES } from '../data/themes';
 import { PUBLICATIONS } from '../data/publications';
-import { PROJECTS } from '../data/projects';
+import { PORTFOLIO, PROJECTS } from '../data/projects';
 import { url } from '../utils';
 
 // For each theme: three recent papers (journal articles first), and the total count.
@@ -22,7 +22,7 @@ const themes = THEMES.map((theme) => {
 <Base
   title="Research"
   heading="Research"
-  lede="Six connected themes, from the physics of the channel to the networks and applications built on it."
+  lede="Trustworthy, data-efficient AI for complex systems, from the physics of the wireless channel to networks and human health."
 >
   <nav class="jump" aria-label="Themes on this page">
     <ul>
@@ -53,13 +53,15 @@ const themes = THEMES.map((theme) => {
   ))}
 
   <section id="projects" class="projects" aria-labelledby="projects-title">
-    <h2 id="projects-title">Projects and fellowships</h2>
+    <h2 id="projects-title">Projects</h2>
+    <p class="portfolio">{PORTFOLIO}</p>
     <div class="project-list">
       {PROJECTS.map((p) => (
         <article class="panel project">
           <h3>{p.name}</h3>
           {p.fullName && <p class="full">{p.fullName}</p>}
-          <p class="meta">{p.funder}<br />{p.period}</p>
+          {p.role && <p class="role">{p.role}</p>}
+          <p class="meta">{p.funder}{p.period && <><br />{p.period}</>}</p>
           <p>{p.summary}</p>
           {p.links?.map((l) => <a href={l.href}>{l.label}</a>)}
         </article>
@@ -169,6 +171,7 @@ const themes = THEMES.map((theme) => {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
     gap: 1rem;
+    align-items: start;
   }
 
   .project {
@@ -188,10 +191,23 @@ const themes = THEMES.map((theme) => {
     color: var(--muted);
   }
 
+  .role {
+    margin-top: 0.4rem !important;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--link);
+  }
+
+  .portfolio {
+    max-width: var(--measure);
+    margin: -0.5rem 0 1.5rem;
+    color: var(--muted);
+  }
+
   .meta {
     font-size: var(--step--1);
     color: var(--muted);
-    margin-top: 0.5rem !important;
+    margin-top: 0.1rem !important;
   }
 
   .project a {

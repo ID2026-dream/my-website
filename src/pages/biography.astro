@@ -1,75 +1,69 @@
 ---
 import Base from '../layouts/Base.astro';
-import { CAREER, EDUCATION, SERVICE, type Entry } from '../data/profile';
+import Portrait from '../components/Portrait.astro';
+import { SITE } from '../site.config';
+import { url } from '../utils';
+
+const more = [
+  { label: 'Career and qualifications', href: url('/career/') },
+  { label: 'Awards and distinctions', href: url('/awards/') },
+  { label: 'Research themes and projects', href: url('/research/') },
+  { label: SITE.lab.name, href: url('/lab/') },
+  { label: 'Supervision', href: url('/supervision/') },
+  { label: 'Service', href: url('/service/') },
+  { label: 'Outreach', href: url('/outreach/') },
+];
 ---
 
 <Base
   title="Biography"
   heading="Biography"
-  lede="From indoor propagation models to autonomous networks and quantum communication."
+  lede="Trustworthy, data-efficient AI for complex systems, built on a career across Canada, Norway and Ireland."
 >
   <div class="layout">
     <div class="bio">
       <p>
-        Dr Indrakshi Dey heads the Programmable Autonomous Systems (PAS) division at Walton Institute, South East
-        Technological University (SETU) in Waterford, Ireland. Her research covers propagation models, performance
-        bounds, data models, algorithm design, signal processing, novel optimisation techniques and predictive analytics
-        for AI-aided, cyber-physical, digital twin, IoT and Internet of Everything systems, across mobile, terrestrial,
-        space and quantum networks.
+        Dr Indrakshi Dey has been a Lecturer in Computer Science in the Department of Computing and Mathematics at South
+        East Technological University (SETU) in Waterford, Ireland, since 2023. She is also a Funded Investigator with
+        CONNECT, the Research Ireland Centre for Future Networks, and an Adjunct Assistant Professor at Trinity College
+        Dublin. She leads {SITE.lab.name}, her research group at SETU.
       </p>
       <p>
-        She is Principal Investigator on national, European, international and commercial projects, a Science
-        Foundation Ireland Funded Investigator with the CONNECT centre, an IEEE Senior Member and a Board Member of the
-        IEEE UK and Ireland Future Networks Group. She is also an expert reviewer of Marie Skłodowska-Curie applications
-        for Horizon Europe.
+        Her research builds trustworthy, data-efficient artificial intelligence platforms for complex systems, from
+        networks to human health, at the intersection of wireless communications, dynamical systems and number theory.
+        She has published 45 peer-reviewed journal papers and 36 conference papers, alongside four research monographs
+        and seven book chapters, holds three granted patents, and received the Best Paper Award at IEEE ICC 2026.
       </p>
       <p>
-        She received an MSc in Wireless Communications from the University of Southampton in 2010 and a PhD in
-        Electrical Engineering from the University of Calgary in 2015. Her doctoral research produced the first
-        generalised propagation model for mobility-constrained indoor wireless communications, accounting for fading and
-        shadowing in a non-Gaussian environment.
+        Her career has taken her across three research cultures. Her PhD at the University of Calgary (2015) challenged
+        rigid stochastic models of wireless propagation. As a Research Fellow at Defence Research and Development Canada
+        she hardened signal processing for waveform-level security in underwater acoustic channels; as an ERCIM Fellow
+        at NTNU she pioneered wideband collaborative spectrum sensing using massive MIMO decision fusion; and as a Marie
+        Skłodowska-Curie EDGE Fellow at Trinity College Dublin she combined quantum game theory with network topology.
+        She was then a Lecturer at Maynooth University from 2019 to 2022, before joining SETU.
       </p>
       <p>
-        After postdoctoral work at Dalhousie University and a research fellowship at the Norwegian University of Science
-        and Technology, she was a Marie Skłodowska-Curie Fellow at Trinity College Dublin from 2017 to 2019. She has also
-        been an Assistant Professor in Electronic Engineering at Maynooth University and an Adjunct Assistant Professor at
-        Trinity College Dublin.
+        She coordinates the QUESTING MSCA Doctoral Network and the Horizon Europe project Q-FENCE, coordinated COALESCE,
+        and leads SETU’s contribution to ENACT. She is an Expert Reviewer for the Horizon Europe Excellence Pillar, an
+        elected Committee Member of the IEEE Future Networks UK and Ireland Local Group and a Senior Member of IEEE.
+        Since 2018 she has been a Senior Mentor with TeenTurn, and she is lead judge at the All-Ireland SciFest and
+        Academic Champion of the Trinity Walton Club.
       </p>
     </div>
 
     <aside class="facts">
-      <section aria-labelledby="career">
-        <h2 id="career">Career</h2>
-        <ol class="timeline">
-          {CAREER.map((e: Entry) => (
-            <li>
-              {e.when && <span class="when">{e.when}</span>}
-              <span class="what">{e.what}</span>
-              <span class="where">{e.where}</span>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section aria-labelledby="education">
-        <h2 id="education">Education</h2>
-        <ol class="timeline">
-          {EDUCATION.map((e: Entry) => (
-            <li>
-              <span class="when">{e.when}</span>
-              <span class="what">{e.what}</span>
-              <span class="where">{e.where}</span>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section aria-labelledby="service">
-        <h2 id="service">Roles and service</h2>
-        <ul class="service">
-          {SERVICE.map((s) => <li>{s}</li>)}
+      <div class="panel card">
+        <Portrait size={96} />
+        <p class="name">{SITE.title}</p>
+        <p class="role">{SITE.role}</p>
+        <p class="org">{SITE.affiliation}</p>
+      </div>
+      <nav aria-labelledby="more">
+        <h2 id="more">More about Indrakshi</h2>
+        <ul class="more">
+          {more.map((m) => <li><a href={m.href}>{m.label}</a></li>)}
         </ul>
-      </section>
+      </nav>
     </aside>
   </div>
 </Base>
@@ -100,7 +94,31 @@ import { CAREER, EDUCATION, SERVICE, type Entry } from '../data/profile';
 
   .facts {
     display: grid;
-    gap: 2.25rem;
+    gap: 2rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+    text-align: center;
+    display: grid;
+    justify-items: center;
+    gap: 0.25rem;
+  }
+
+  .card p {
+    margin: 0;
+  }
+
+  .name {
+    margin-top: 0.75rem !important;
+    font-family: var(--display);
+    font-size: var(--step-1);
+  }
+
+  .role,
+  .org {
+    color: var(--muted);
+    font-size: 0.9375rem;
   }
 
   .facts h2 {
@@ -108,54 +126,18 @@ import { CAREER, EDUCATION, SERVICE, type Entry } from '../data/profile';
     font-size: var(--step-1);
   }
 
-  .timeline,
-  .service {
+  .more {
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .timeline li {
-    display: grid;
-    padding: 0.65rem 0 0.65rem 1rem;
-    border-left: 2px solid var(--rule);
-    position: relative;
-  }
-
-  .timeline li::before {
-    content: '';
-    position: absolute;
-    left: -5px;
-    top: 1.05rem;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--link);
-  }
-
-  .when {
-    font-size: var(--step--1);
-    font-weight: 600;
-    color: var(--link);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .what {
-    font-weight: 600;
-    line-height: 1.35;
-  }
-
-  .where {
-    color: var(--muted);
-    font-size: 0.9375rem;
-  }
-
-  .service li {
-    padding-block: 0.5rem;
+  .more li {
+    padding-block: 0.55rem;
     border-top: 1px solid var(--rule);
   }
 
-  .service li:last-child {
+  .more li:last-child {
     border-bottom: 1px solid var(--rule);
   }
 </style>

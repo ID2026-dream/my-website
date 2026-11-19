@@ -1,0 +1,130 @@
+---
+import Base from '../layouts/Base.astro';
+import { SUPERVISION, SUPERVISION_SUMMARY as SUM } from '../data/profile';
+
+const degrees = [...new Set(SUPERVISION.map((s) => s.degree))];
+---
+
+<Base
+  title="Supervision"
+  heading="Supervision"
+  lede="PhD students and postdoctoral fellows at SETU and partner universities."
+>
+  <section class="summary panel" aria-label="Supervision at a glance">
+    <ul>
+      <li><strong>{SUM.currentPhd}</strong> current PhD students</li>
+      <li><strong>{SUM.currentPostdocs}</strong> postdoctoral fellows</li>
+      <li><strong>{SUM.graduatedPhd}</strong> PhD graduates</li>
+    </ul>
+    <p>{SUM.note} {SUM.topics}</p>
+  </section>
+
+  {
+    degrees.map((degree) => (
+      <section class="group" aria-labelledby={`d-${degree}`}>
+        <h2 id={`d-${degree}`}>{degree} researchers</h2>
+        <ul>
+          {SUPERVISION.filter((s) => s.degree === degree).map((s) => (
+            <li>
+              <h3>{s.href ? <a href={s.href}>{s.name}</a> : s.name}</h3>
+              <p class="topic">{s.topic}</p>
+              <p class="meta">
+                {s.institution && (
+                  <>
+                    {s.institution}
+                    <br />
+                  </>
+                )}
+                {s.role}
+                {s.status && (
+                  <>
+                    <br />
+                    {s.status}
+                  </>
+                )}
+              </p>
+              {s.note && <p>{s.note}</p>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</Base>
+
+<style>
+  .summary {
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 3rem;
+    max-width: 48rem;
+  }
+
+  .summary ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin: 0 0 0.75rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .summary li {
+    padding: 0;
+    border: 0;
+  }
+
+  .summary strong {
+    font-family: var(--display);
+    font-size: var(--step-2);
+    font-weight: 560;
+    margin-right: 0.3rem;
+  }
+
+  .summary p {
+    color: var(--muted);
+  }
+
+  .group + .group {
+    margin-top: 3rem;
+  }
+
+  h2 {
+    margin: 0 0 0.75rem;
+    font-size: var(--step-2);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-width: 48rem;
+  }
+
+  li {
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  li:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  h3 {
+    margin: 0;
+    font-size: var(--step-1);
+  }
+
+  p {
+    margin: 0.35rem 0 0;
+    max-width: var(--measure);
+  }
+
+  .topic {
+    font-weight: 600;
+  }
+
+  .meta {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+</style>

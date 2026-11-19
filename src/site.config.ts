@@ -4,35 +4,48 @@ export const SITE = {
   name: 'Indrakshi Dey',
   title: 'Dr Indrakshi Dey',
   description:
-    'Dr Indrakshi Dey heads the Programmable Autonomous Systems division at Walton Institute, South East Technological University, Waterford. Research in quantum and 6G networks, IoT, edge AI and connected health.',
+    'Dr Indrakshi Dey is a Lecturer in Computer Science at South East Technological University, Waterford. Trustworthy, data-efficient AI for complex systems, from networks to human health.',
 
-  role: 'Head of Division, Programmable Autonomous Systems',
-  affiliation: 'Walton Institute, South East Technological University (SETU)',
+  role: 'Lecturer in Computer Science',
+  affiliation: 'Department of Computing and Mathematics, South East Technological University (SETU)',
   location: 'Waterford, Ireland',
 
   // The opening paragraph on the home page.
   intro:
-    'Indrakshi leads the Programmable Autonomous Systems division at Walton Institute, where her work spans propagation models, performance bounds, algorithms and predictive analytics for AI-aided, cyber-physical and IoT systems, across terrestrial, space and quantum networks.',
+    'Indrakshi builds trustworthy, data-efficient artificial intelligence platforms for complex systems, from networks to human health. Her work sits at the intersection of wireless communications, dynamical systems and number theory.',
 
-  // Your photo lives in public/. Replace public/photo.jpg to change it
-  // (square, at least 400 × 400 pixels looks best). Set to '' to show initials.
-  photo: 'photo.jpg',
+  // The portrait in public/. 'portrait-sketch.jpg' is the pencil-style version;
+  // set this to 'photo.jpg' to use the original photo, or '' to show initials.
+  photo: 'portrait-sketch.jpg',
 
-  // Leave empty to hide. Example: 'indrakshi.dey@setu.ie'
-  email: '',
+  // Leave empty to hide.
+  email: 'indrakshi.dey@setu.ie',
 
   address: [
-    'Walton Institute',
+    'Department of Computing and Mathematics',
+    'School of Science',
     'South East Technological University',
-    'West Campus, Carriganore',
-    'Waterford X91 P20H, Ireland',
+    'Cork Road, Waterford X91 K0EK, Ireland',
   ],
 
-  // Profile links. Add Google Scholar, LinkedIn etc. in the same format.
+  // Your research group. Change the name here and it updates on every page.
+  lab: {
+    name: 'The Púca Lab',
+    tagline: 'Shape-shifting systems that never lose their function.',
+    meaning:
+      'In Irish folklore the púca is a shape-shifter that can take many forms. Our systems do the same: networks, protocols and AI platforms that change form under stress but keep doing their job. Engineers call this degeneracy, the ability of structurally different parts to perform the same function, and it sits at the heart of our research on resilience.',
+  },
+
+  // Profile links, shown in the header on the home page and in the footer.
   links: [
+    { label: 'Google Scholar', href: 'https://scholar.google.com/citations?user=gVfaHKwAAAAJ' },
     { label: 'ORCID', href: 'https://orcid.org/0000-0001-9669-6417' },
+    { label: 'SETU Pure', href: 'https://research.setu.ie/en/persons/indrakshi-dey/' },
+    { label: 'ResearchGate', href: 'https://www.researchgate.net/profile/Indrakshi-Dey' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/indrakshi-dey-aa658839/' },
     { label: 'SETU profile', href: 'https://www.setu.ie/staff/indrakshi-dey' },
-    { label: 'Walton Institute', href: 'https://waltoninstitute.ie/about/staff/dr-indrakshi-dey' },
-    { label: 'CONNECT', href: 'https://connectcentre.ie/people/indrakshi-dey' },
   ],
+
+  // Scopus Author ID, shown on the Publications page.
+  scopus: '48361017300',
 };

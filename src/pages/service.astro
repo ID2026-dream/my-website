@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import EntryList from '../components/EntryList.astro';
+import { SERVICE_INSTITUTION, SERVICE_DISCIPLINE, SERVICE_SOCIETY } from '../data/profile';
+---
+
+<Base
+  title="Service"
+  heading="Service"
+  lede="Leadership at SETU, service to the research community, and support for girls and women in STEM."
+>
+  <section id="institution" aria-labelledby="institution-title">
+    <h2 id="institution-title">Service to SETU</h2>
+    <EntryList entries={SERVICE_INSTITUTION} />
+  </section>
+
+  <section id="discipline" class="section" aria-labelledby="discipline-title">
+    <h2 id="discipline-title">Service to the discipline</h2>
+    <EntryList entries={SERVICE_DISCIPLINE} />
+  </section>
+
+  <section id="society" class="section" aria-labelledby="society-title">
+    <h2 id="society-title">Service to society</h2>
+    <EntryList entries={SERVICE_SOCIETY} />
+  </section>
+</Base>
+
+<style>
+  h2 {
+    margin: 0 0 1rem;
+    font-size: var(--step-2);
+  }
+</style>

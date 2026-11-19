@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import ThemeCard from '../components/ThemeCard.astro';
+import { SITE } from '../site.config';
+import { THEMES } from '../data/themes';
+import { PUBLICATIONS } from '../data/publications';
+import { SUPERVISION, SUPERVISION_SUMMARY as SUM } from '../data/profile';
+import { url } from '../utils';
+
+const countFor = (id: string) => PUBLICATIONS.filter((p) => p.themes.includes(id as never)).length;
+const { lab } = SITE;
+---
+
+<Base title={lab.name} heading={lab.name} lede={lab.tagline}>
+  <section class="intro">
+    <p class="lede">
+      {lab.name} is Dr Indrakshi Dey’s research group in the Department of Computing and Mathematics at South East
+      Technological University. We build trustworthy, data-efficient AI platforms for complex systems, from the physics
+      of the wireless channel to networks and human health.
+    </p>
+    <p class="meaning"><strong>Why the name?</strong> {lab.meaning}</p>
+    <p>
+      Open research is standard practice in the group: outputs are released as preprints with persistent identifiers,
+      code is open-sourced under permissive licences, and protocols are documented so that results can be reproduced.
+    </p>
+  </section>
+
+  <section class="section" aria-labelledby="themes">
+    <div class="section-head">
+      <h2 id="themes">What we work on</h2>
+      <a href={url('/research/#projects')}>Our projects</a>
+    </div>
+    <div class="grid">
+      {THEMES.map((theme) => <ThemeCard theme={theme} count={countFor(theme.id)} />)}
+    </div>
+  </section>
+
+  <section class="section people" aria-labelledby="people">
+    <div class="section-head">
+      <h2 id="people">People</h2>
+      <a href={url('/supervision/')}>Supervision</a>
+    </div>
+    <p class="count">
+      Dr Dey currently supervises {SUM.currentPhd} PhD students and {SUM.currentPostdocs} postdoctoral fellows, and has
+      graduated {SUM.graduatedPhd} PhD students.
+    </p>
+    <ul>
+      <li>
+        <h3>Dr Indrakshi Dey</h3>
+        <p class="topic">Principal Investigator</p>
+      </li>
+      {SUPERVISION.map((s) => (
+        <li>
+          <h3>{s.href ? <a href={s.href}>{s.name}</a> : s.name}</h3>
+          <p class="topic">{s.degree} researcher: {s.topic}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section panel join" aria-labelledby="join">
+    <h2 id="join">Join or work with us</h2>
+    <p>
+      For research collaboration, industry projects or PhD and postdoctoral enquiries, email{' '}
+      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .intro p {
+    margin: 0;
+    max-width: var(--measure);
+  }
+
+  .intro p + p {
+    margin-top: 1rem;
+    color: var(--muted);
+  }
+
+  .meaning strong {
+    color: var(--ink);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: 1rem;
+  }
+
+  .section-head h2,
+  .join h2 {
+    margin: 0;
+    font-size: var(--step-2);
+  }
+
+  .count {
+    margin: 0 0 1rem;
+    max-width: var(--measure);
+    color: var(--muted);
+  }
+
+  .people ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-width: 48rem;
+  }
+
+  .people li {
+    padding-block: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .people li:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .people h3 {
+    margin: 0 0 0.2rem;
+    font-size: var(--step-1);
+  }
+
+  .people p {
+    margin: 0;
+  }
+
+  .topic {
+    color: var(--muted);
+  }
+
+  .join {
+    padding: 1.5rem;
+  }
+
+  .join h2 {
+    margin-bottom: 0.75rem;
+  }
+
+  .join p {
+    margin: 0;
+    max-width: var(--measure);
+  }
+</style>

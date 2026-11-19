@@ -1,41 +1,64 @@
-// Funded projects and fellowships, newest first.
+// Funded projects and fellowships. Source: Dr Dey's CV, November 2026.
 
 export interface Project {
   name: string;
   fullName?: string;
   funder: string;
-  period: string;
+  role?: string;
+  period?: string;
   summary: string;
   links?: { label: string; href: string }[];
 }
 
+// Shown above the project list.
+export const PORTFOLIO =
+  'Dr Dey currently leads or co-leads 6 Horizon Europe grants (including an MSCA Doctoral Network and an MSCA Staff Exchange), 6 Research Ireland grants, 2 Enterprise Ireland grants and 3 Higher Education Authority grants.';
+
 export const PROJECTS: Project[] = [
   {
-    name: 'ENACT',
-    funder: 'Horizon Europe',
-    period: 'From 2024, 42 months',
+    name: 'QUESTING',
+    funder: 'Horizon Europe, MSCA Doctoral Network',
+    role: 'Coordinator',
     summary:
-      'Investigates how air and light pollution affect pre-clinical markers of non-communicable ocular and dermatological diseases, and how prolonged exposure accelerates oxidative stress and inflammation.',
-    links: [
-      {
-        label: 'Interview with Silicon Republic',
-        href: 'https://waltoninstitute.ie/news-and-events/news/indrakshi-dey-discusses-the-link-between-her-research-and-societal-benefits-with-silicon-republic',
-      },
-    ],
+      'Trains 15 PhD researchers with nine universities and 13 industry partners, including Airbus Defence and Space, BT and Telecom Italia, and aims to set a European standard for doctoral training.',
+  },
+  {
+    name: 'Q-FENCE',
+    funder: 'Horizon Europe',
+    role: 'Coordinator',
+    summary:
+      'Delivers quantum-safe encryption for financial institutions, healthcare providers and government agencies ahead of the EU 2030 deadline, with 12 academic and industry partners.',
+  },
+  {
+    name: 'ENACT',
+    fullName: 'Environmental Effect on Health Care and Wellbeing and Active Interventions',
+    funder: 'Horizon Europe (HORIZON-HLTH-2024-ENVHLTH-02-06, grant 101157151)',
+    role: 'Leads SETU’s contribution',
+    period: '42 months',
+    summary:
+      'Builds an AI-driven risk score and platform to predict, monitor and prevent non-communicable diseases. The SETU team studies how prolonged exposure to air and light pollution accelerates oxidative stress and inflammation, using Bayesian modelling and transfer learning on space-time graph neural networks.',
+    links: [{ label: 'Project record on CORDIS', href: 'https://cordis.europa.eu/project/id/101157151' }],
+  },
+  {
+    name: 'COALESCE',
+    funder: 'Horizon Europe (€1.6M)',
+    role: 'Coordinator',
+    summary:
+      'Produced the first quantification of the energy deficits of the wireless access layer: 20–40% of airtime is spent on pilots and synchronisation overhead, roughly 100 TWh of lost energy a year.',
+  },
+  {
+    name: 'GreenSphere',
+    funder: 'Enterprise Ireland Innovation Partnership',
+    period: '2025',
+    summary: 'A replicable model for small and medium-sized enterprises adopting energy-efficient AI.',
   },
   {
     name: 'CONNECT',
-    fullName: 'Centre for Future Networks and Communications',
-    funder: 'Science Foundation Ireland',
-    period: 'Funded Investigator',
-    summary:
-      'Propagation link models for intra-body and inter-body communication, a theoretical framework for probabilistic quantum communication networks, and upper bounds on throughput over superactivated quantum channels carrying classical information.',
+    fullName: 'Research Ireland Centre for Future Networks',
+    funder: 'Research Ireland',
+    role: 'Funded Investigator',
+    period: '2022 to present',
+    summary: 'National partnerships in future networks and communications, including the SETU–Trinity College Dublin collaboration.',
     links: [{ label: 'CONNECT profile', href: 'https://connectcentre.ie/people/indrakshi-dey' }],
-  },
-  {
-    name: 'Marie Skłodowska-Curie Fellowship',
-    funder: 'European Commission',
-    period: '2017 to 2019',
-    summary: 'Individual fellowship hosted by Trinity College Dublin.',
   },
 ];

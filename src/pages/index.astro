@@ -5,15 +5,14 @@ import ThemeCard from '../components/ThemeCard.astro';
 import PubItem from '../components/PubItem.astro';
 import { SITE } from '../site.config';
 import { THEMES } from '../data/themes';
-import { PUBLICATIONS } from '../data/publications';
+import { PUBLICATIONS, PUB_STATS } from '../data/publications';
 import { PROJECTS } from '../data/projects';
 import { MODULES } from '../data/teaching';
 import { url } from '../utils';
 
 const countFor = (id: string) => PUBLICATIONS.filter((p) => p.themes.includes(id as never)).length;
 const recent = PUBLICATIONS.filter((p) => p.type === 'journal' || p.type === 'conference').slice(0, 5);
-const papers = PUBLICATIONS.filter((p) => p.type === 'journal' || p.type === 'conference').length;
-const current = PROJECTS[0];
+const leading = PROJECTS.filter((p) => p.role === 'Coordinator' || p.role?.startsWith('Leads')).slice(0, 4);
 ---
 
 <Base>
@@ -25,7 +24,7 @@ const current = PROJECTS[0];
       <p class="org">{SITE.affiliation}, {SITE.location}</p>
       <ul class="links">
         {
-          SITE.links.map((link) => (
+          SITE.links.slice(0, 4).map((link) => (
             <li>
               <a href={link.href}>{link.label}</a>
             </li>
@@ -39,8 +38,9 @@ const current = PROJECTS[0];
   <section class="intro">
     <p class="lede">{SITE.intro}</p>
     <p>
-      She is a Science Foundation Ireland Funded Investigator, an IEEE Senior Member and a Board Member of the IEEE UK
-      and Ireland Future Networks Group. <a href={url('/biography/')}>Read her full biography</a>.
+      She leads <a href={url('/lab/')}>{SITE.lab.name}</a>, her research group at SETU, and coordinates European
+      projects including the QUESTING doctoral network and Q-FENCE. Her work received the IEEE ICC 2026 Best Paper
+      Award. <a href={url('/biography/')}>Read her full biography</a>.
     </p>
   </section>
 
@@ -58,20 +58,25 @@ const current = PROJECTS[0];
     <section aria-labelledby="pubs">
       <div class="section-head">
         <h2 id="pubs">Recent publications</h2>
-        <a href={url('/publications/')}>All {PUBLICATIONS.length} publications</a>
+        <a href={url('/publications/')}>All publications</a>
       </div>
       <ul class="pubs">
         {recent.map((pub) => <PubItem pub={pub} showYear />)}
       </ul>
-      <p class="note">{papers} journal and conference papers since 2011, plus book chapters and preprints.</p>
+      <p class="note">{PUB_STATS.slice(0, 4).map((st) => `${st.value} ${st.label}`).join(', ')} since 2011.</p>
     </section>
 
     <aside>
       <section class="panel side" aria-labelledby="project">
-        <h2 id="project">Current project</h2>
-        <p class="side-title">{current.name}</p>
-        <p class="side-meta">{current.funder}, {current.period.toLowerCase()}</p>
-        <p>{current.summary}</p>
+        <h2 id="project">Leading</h2>
+        <ul class="leading">
+          {leading.map((p) => (
+            <li>
+              <p class="side-title">{p.name}</p>
+              <p class="side-meta">{p.role}, {p.funder.replace(/ \(.*\)$/, '')}</p>
+            </li>
+          ))}
+        </ul>
         <a href={url('/research/#projects')}>All projects</a>
       </section>
 
@@ -212,5 +217,19 @@ const current = PROJECTS[0];
   .side-meta {
     font-size: var(--step--1);
     color: var(--muted);
+  }
+
+  .leading {
+    margin: 0 0 0.75rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .leading li + li {
+    margin-top: 0.6rem;
+  }
+
+  .leading p {
+    margin: 0 !important;
   }
 </style>

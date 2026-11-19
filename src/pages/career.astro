@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import EntryList from '../components/EntryList.astro';
+import { CAREER, EDUCATION, MEMBERSHIPS } from '../data/profile';
+---
+
+<Base
+  title="Career and qualifications"
+  heading="Career and qualifications"
+  lede="Positions held since completing a PhD at the University of Calgary in 2015."
+>
+  <section aria-labelledby="career">
+    <h2 id="career">Career to date</h2>
+    <EntryList entries={CAREER} timeline />
+  </section>
+
+  <section class="section" aria-labelledby="education">
+    <h2 id="education">Qualifications</h2>
+    <EntryList entries={EDUCATION} timeline />
+  </section>
+
+  <section class="section" aria-labelledby="memberships">
+    <h2 id="memberships">Professional memberships</h2>
+    <EntryList entries={MEMBERSHIPS} />
+  </section>
+</Base>
+
+<style>
+  h2 {
+    margin: 0 0 1rem;
+    font-size: var(--step-2);
+  }
+</style>

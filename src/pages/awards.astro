@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import EntryList from '../components/EntryList.astro';
+import { AWARDS, PATENTS } from '../data/profile';
+---
+
+<Base
+  title="Awards and distinctions"
+  heading="Awards, prizes and distinctions"
+  lede="Prizes, fellowships and scholarships from Canada to Ireland."
+>
+  <EntryList entries={AWARDS} />
+
+  <section class="section" aria-labelledby="patents">
+    <h2 id="patents">Patents</h2>
+    <p>{PATENTS.count} granted patents, in {PATENTS.areas}.</p>
+  </section>
+</Base>
+
+<style>
+  h2 {
+    margin: 0 0 0.75rem;
+    font-size: var(--step-2);
+  }
+
+  p {
+    margin: 0;
+  }
+</style>

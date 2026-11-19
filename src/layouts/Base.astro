@@ -5,7 +5,7 @@ import '@fontsource-variable/newsreader/opsz-italic.css';
 import '../styles/global.css';
 import Wave from '../components/Wave.astro';
 import { SITE } from '../site.config';
-import { TEAM } from '../data/team';
+import { NAV_GROUPS } from '../data/nav';
 import { url } from '../utils';
 
 interface Props {
@@ -19,16 +19,14 @@ const { title, description = SITE.description, heading, lede } = Astro.props;
 const fullTitle = title ? `${title} | ${SITE.title}` : `${SITE.title}: ${SITE.role}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
-const nav = [
-  { label: 'Biography', href: url('/biography/') },
-  { label: 'Research', href: url('/research/') },
-  { label: 'Publications', href: url('/publications/') },
-  { label: 'Teaching', href: url('/teaching/') },
-  ...(TEAM.length > 0 ? [{ label: 'Team', href: url('/team/') }] : []),
-  { label: 'Contact', href: '#contact' },
-];
+const groups = NAV_GROUPS.map((g) => ({
+  heading: g.heading,
+  items: g.items.map((i) => ({ ...i, href: url(i.path) })),
+}));
+const primary = groups.flatMap((g) => g.items).filter((i) => i.primary);
 
 const here = Astro.url.pathname;
+const isHere = (href: string) => here === href.split('#')[0];
 ---
 
 <!doctype html>
@@ -55,21 +53,34 @@ const here = Astro.url.pathname;
     <header class="band">
       <div class="wrap bar">
         <a class="brand" href={url('/')}>{SITE.name}</a>
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
-        <nav id="site-nav" aria-label="Main">
+        <nav class="primary" aria-label="Main">
           <ul>
-            {
-              nav.map((item) => (
-                <li>
-                  <a href={item.href} aria-current={here.startsWith(item.href) && item.href !== '#contact' ? 'page' : undefined}>
-                    {item.label}
-                  </a>
-                </li>
-              ))
-            }
+            {primary.map((item) => (
+              <li><a href={item.href} aria-current={isHere(item.href) ? 'page' : undefined}>{item.label}</a></li>
+            ))}
           </ul>
         </nav>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-panel">
+          <span class="when-closed">All pages</span><span class="when-open">Close</span>
+        </button>
       </div>
+
+      <nav id="menu-panel" class="wrap menu-panel" aria-label="All pages">
+        {groups.map((g) => (
+          <div class="menu-group">
+            <p class="menu-heading">{g.heading}</p>
+            <ul>
+              {g.items.map((item) => (
+                <li><a href={item.href} aria-current={isHere(item.href) ? 'page' : undefined}>{item.label}</a></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <div class="menu-group">
+          <p class="menu-heading">Contact</p>
+          <ul><li><a href="#contact">Address and links</a></li></ul>
+        </div>
+      </nav>
 
       <div class="wrap band-body">
         <slot name="hero">
@@ -113,18 +124,19 @@ const here = Astro.url.pathname;
 
     <script>
       const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
-      const nav = document.getElementById('site-nav');
-      toggle?.addEventListener('click', () => {
-        const open = toggle.getAttribute('aria-expanded') === 'true';
-        toggle.setAttribute('aria-expanded', String(!open));
-        toggle.textContent = open ? 'Menu' : 'Close';
-        nav?.classList.toggle('open', !open);
+      const panel = document.getElementById('menu-panel');
+      const setOpen = (open: boolean) => {
+        toggle?.setAttribute('aria-expanded', String(open));
+        panel?.classList.toggle('open', open);
+      };
+      toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+          setOpen(false);
+          toggle.focus();
+        }
       });
-      nav?.querySelectorAll('a').forEach((a) =>
-        a.addEventListener('click', () => {
-          if (toggle?.getAttribute('aria-expanded') === 'true') toggle.click();
-        }),
-      );
+      panel?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
     </script>
   </body>
 </html>
@@ -172,7 +184,7 @@ const here = Astro.url.pathname;
     letter-spacing: -0.005em;
   }
 
-  nav ul {
+  .primary ul {
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem 1.5rem;
@@ -181,18 +193,27 @@ const here = Astro.url.pathname;
     list-style: none;
   }
 
-  nav a {
+  .primary {
+    margin-left: auto;
+  }
+
+  .primary a,
+  .menu-panel a {
     color: var(--on-navy-muted);
     text-decoration: none;
+  }
+
+  .primary a {
     padding-block: 0.25rem;
     border-bottom: 2px solid transparent;
   }
 
-  nav a:hover {
+  .primary a:hover,
+  .menu-panel a:hover {
     color: var(--on-navy);
   }
 
-  nav a[aria-current='page'] {
+  .primary a[aria-current='page'] {
     color: var(--on-navy);
     border-bottom-color: var(--signal);
   }
@@ -210,39 +231,60 @@ const here = Astro.url.pathname;
     cursor: pointer;
   }
 
-  @media (max-width: 48rem) {
-    :global(.js) .menu-toggle {
-      display: inline-block;
-    }
+  .menu-toggle:hover {
+    border-color: var(--signal);
+  }
 
-    :global(.js) #site-nav {
+  .when-open,
+  .menu-toggle[aria-expanded='true'] .when-closed {
+    display: none;
+  }
+
+  .menu-toggle[aria-expanded='true'] .when-open {
+    display: inline;
+  }
+
+  /* The full menu. Without JavaScript it simply stays open. */
+  .menu-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 1.5rem 2rem;
+    padding-block: 1.25rem 1.75rem;
+    background: linear-gradient(var(--navy-line), var(--navy-line)) top center / calc(100% - 2 * var(--gutter)) 1px
+      no-repeat;
+  }
+
+  :global(.js) .menu-toggle {
+    display: inline-block;
+  }
+
+  :global(.js) .menu-panel:not(.open) {
+    display: none;
+  }
+
+  .menu-heading {
+    margin: 0 0 0.5rem;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--signal);
+  }
+
+  .menu-panel ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .menu-panel a[aria-current='page'] {
+    color: var(--on-navy);
+    box-shadow: inset 0 -2px 0 var(--signal);
+  }
+
+  @media (max-width: 52rem) {
+    .primary {
       display: none;
-      flex-basis: 100%;
-    }
-
-    :global(.js) #site-nav.open {
-      display: block;
-    }
-
-    #site-nav ul {
-      flex-direction: column;
-      gap: 0;
-      border-top: 1px solid var(--navy-line);
-    }
-
-    #site-nav li {
-      border-bottom: 1px solid var(--navy-line);
-    }
-
-    #site-nav a {
-      display: block;
-      padding-block: 0.75rem;
-      border-bottom: 0;
-    }
-
-    #site-nav a[aria-current='page'] {
-      box-shadow: inset 3px 0 0 var(--signal);
-      padding-left: 0.75rem;
     }
   }
 

@@ -1,12 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
+import EntryList from '../components/EntryList.astro';
 import { MODULES } from '../data/teaching';
+import { TALKS } from '../data/profile';
+
+const guest = TALKS.filter((t) => t.what.startsWith('Guest lecture'));
 ---
 
 <Base
   title="Teaching"
   heading="Teaching"
-  lede="Postgraduate teaching in artificial intelligence, built around hands-on labs."
+  lede="Lecturer in Computer Science, Department of Computing and Mathematics, South East Technological University."
 >
   <div class="modules">
     {MODULES.map((m) => (
@@ -21,6 +25,11 @@ import { MODULES } from '../data/teaching';
       </article>
     ))}
   </div>
+
+  <section class="section" aria-labelledby="guest">
+    <h2 id="guest" class="sub">Guest lectures</h2>
+    <EntryList entries={guest} />
+  </section>
 </Base>
 
 <style>
@@ -70,5 +79,9 @@ import { MODULES } from '../data/teaching';
 
   .go {
     font-weight: 600;
+  }
+
+  .sub {
+    margin: 0 0 1rem;
   }
 </style>

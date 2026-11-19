@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import EntryList from '../components/EntryList.astro';
+import { OUTREACH, TALKS } from '../data/profile';
+import { url } from '../utils';
+
+const invited = TALKS.filter((t) => !t.what.startsWith('Guest lecture'));
+---
+
+<Base
+  title="Outreach"
+  heading="Outreach"
+  lede="Invited talks, media and public engagement, with a focus on AI, health and women in STEM."
+>
+  <section aria-labelledby="talks">
+    <h2 id="talks">Invited talks</h2>
+    <EntryList entries={invited} timeline />
+  </section>
+
+  <section class="section" aria-labelledby="media">
+    <h2 id="media">Media and public engagement</h2>
+    <EntryList entries={OUTREACH} timeline />
+  </section>
+
+  <p class="section more">
+    Mentoring and judging for girls in STEM is listed under{' '}
+    <a href={url('/service/#society')}>service to society</a>. Guest lectures are on the{' '}
+    <a href={url('/teaching/')}>Teaching</a> page.
+  </p>
+</Base>
+
+<style>
+  h2 {
+    margin: 0 0 1rem;
+    font-size: var(--step-2);
+  }
+
+  .more {
+    color: var(--muted);
+    max-width: var(--measure);
+  }
+</style>

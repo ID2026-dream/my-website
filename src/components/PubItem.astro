@@ -44,6 +44,16 @@ const { pub, showYear = false } = Astro.props;
     line-height: 1.4;
   }
 
+  .title a {
+    color: var(--ink);
+    text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent);
+  }
+
+  .title a:hover {
+    color: var(--link);
+    text-decoration-color: currentColor;
+  }
+
   .authors,
   .venue {
     font-size: 0.9375rem;
