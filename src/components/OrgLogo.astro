@@ -1,0 +1,48 @@
+---
+// SETU logo. Two versions live in src/assets/:
+//   setu-logo.png        full colour, for light backgrounds (the footer)
+//   setu-logo-white.png  white, for the blue header
+// An .svg, .jpg or .webp with the same name also works. If a file is
+// removed, that logo simply isn't shown.
+const colourFiles = import.meta.glob<string>('../assets/setu-logo.{svg,png,jpg,jpeg,webp}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+const whiteFiles = import.meta.glob<string>('../assets/setu-logo-white.{svg,png,webp}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+
+interface Props {
+  height?: number;
+  variant?: 'colour' | 'white';
+}
+
+const { height = 40, variant = 'colour' } = Astro.props;
+const src = Object.values(variant === 'white' ? whiteFiles : colourFiles)[0] ?? null;
+---
+
+{
+  src && (
+    <a class="org-logo" href="https://www.setu.ie">
+      <img src={src} alt="South East Technological University" style={`height:${height}px`} />
+    </a>
+  )
+}
+
+<style>
+  .org-logo {
+    display: inline-flex;
+    align-items: center;
+    line-height: 0;
+    border-radius: 4px;
+  }
+
+  .org-logo img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+  }
+</style>
