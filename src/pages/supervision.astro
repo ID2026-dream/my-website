@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import TeamPhoto from '../components/TeamPhoto.astro';
+import { projectId } from '../data/projects';
+import { url } from '../utils';
 import {
   TEAM,
   TEAM_GROUPS,
@@ -61,6 +63,23 @@ const lines = (...xs: (string | undefined | false)[]) => xs.filter(Boolean) as s
                     </>
                   ))}
                 </p>
+                {(m.projects?.length || m.funding) && (
+                  <p class="meta">
+                    {m.projects?.length ? (
+                      <>
+                        {m.projects.length > 1 ? 'Projects: ' : 'Project: '}
+                        {m.projects.map((name, i) => (
+                          <>
+                            {i > 0 && ', '}
+                            <a href={url(`/research/#${projectId(name)}`)}>{name}</a>
+                          </>
+                        ))}
+                      </>
+                    ) : (
+                      `Funded by ${m.funding}`
+                    )}
+                  </p>
+                )}
                 {m.note && <p>{m.note}</p>}
                 {m.links && m.links.length > 0 && (
                   <p class="links">
@@ -98,6 +117,7 @@ const lines = (...xs: (string | undefined | false)[]) => xs.filter(Boolean) as s
                     ),
                   )}
                 </p>
+                {m.funding && <p class="meta">Funded by {m.funding}</p>}
                 <p>{m.graduated ? `Thesis defended in ${m.graduated}.` : m.departed!.destination}</p>
                 {m.links && m.links.length > 0 && (
                   <p class="links">

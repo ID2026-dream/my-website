@@ -14,7 +14,12 @@ import { url } from '../utils';
 
 const countFor = (id: string) => PUBLICATIONS.filter((p) => p.themes.includes(id as never)).length;
 const recent = PUBLICATIONS.filter((p) => p.type === 'journal' || p.type === 'conference').slice(0, 5);
-const leading = PROJECTS.filter((p) => p.role === 'Coordinator' || p.role === 'Principal Investigator' || p.role?.startsWith('Leads')).slice(0, 4);
+// Projects Dr Dey leads, coordinated ones first.
+const leading = PROJECTS.filter(
+  (p) => p.tier !== 'other' && /^(Coordinator|Principal Investigator|Leads)/.test(p.role ?? ''),
+)
+  .sort((a, b) => Number(b.role === 'Coordinator') - Number(a.role === 'Coordinator'))
+  .slice(0, 4);
 ---
 
 <Base>
@@ -99,7 +104,7 @@ const leading = PROJECTS.filter((p) => p.role === 'Coordinator' || p.role === 'P
           {leading.map((p) => (
             <li>
               <p class="side-title">{p.name}</p>
-              <p class="side-meta">{p.role}, {p.funder.replace(/ \(.*\)$/, '')}</p>
+              <p class="side-meta">{p.role!.split(';')[0]}, {p.funder.replace(/ \(.*\)$/, '')}</p>
             </li>
           ))}
         </ul>

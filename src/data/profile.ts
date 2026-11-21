@@ -266,6 +266,8 @@ export interface Member {
   role?: string; // e.g. 'Co-supervised with ...'
   note?: string;
   links?: Link[]; // the first link is also used on the person's name
+  projects?: string[]; // project names from src/data/projects.ts
+  funding?: string; // how the post is funded, if not by a listed project
   graduated?: string; // year the PhD thesis was defended
   departed?: { date: string; destination: string };
 }
@@ -278,8 +280,9 @@ export const TEAM_GROUPS: { id: TeamGroup; label: string; one: string }[] = [
 
 const orcid = (id: string): Link => ({ label: 'ORCID', href: `https://orcid.org/${id}` });
 
-// Topics come from each person's public profile or from their papers with
-// Dr Dey. Links are only given where the profile is clearly the same person.
+// Thesis and project titles come from Dr Dey's CV; other details from each
+// person's public profile, the project websites or their papers with Dr Dey.
+// Links are only given where the profile is clearly the same person.
 export const TEAM: Member[] = [
   // PhD students
   {
@@ -288,7 +291,8 @@ export const TEAM: Member[] = [
     start: '2023-01-01',
     end: '2026-12-31',
     institution: 'Maynooth University',
-    topic: 'Game-theoretic and auction-based resource sharing for dense IoT networks',
+    topic: 'Bayesian game theory-based protocols for resource sharing among massive numbers of IoT devices',
+    funding: 'Research Ireland platform funding through CONNECT',
     links: [{ label: 'CONNECT profile', href: 'https://connectcentre.ie/people/nirmal-wickramasinghe' }],
   },
   {
@@ -297,9 +301,9 @@ export const TEAM: Member[] = [
     start: '2023-01-15',
     end: '2026-12-15',
     institution: 'CONNECT, Trinity College Dublin',
-    topic: 'Quantum network tomography',
+    topic: 'Agent-based modelling for quantum network tomography',
     role: 'Co-supervised with Prof. Nicola Marchetti',
-    note: 'Part of CoQREATE, the Convergent Quantum Research Alliance in Telecommunications.',
+    projects: ['CoQREATE'],
     links: [{ label: 'CONNECT profile', href: 'https://connectcentre.ie/people/athira-kalavampara-raghunadhan' }],
   },
   {
@@ -307,21 +311,48 @@ export const TEAM: Member[] = [
     group: 'phd',
     start: '2024-01-01',
     end: '2028-12-31',
-    topic: 'Automated music therapy for anxiety and depression in older people',
+    topic: 'Automated music therapy for anxiety and depression management in older people',
+    note: 'MTech in Control and Instrumentation Systems, Jamia Millia Islamia, New Delhi.',
     links: [orcid('0009-0009-6602-3815')],
   },
-  { name: 'Yibin Xie', group: 'phd', start: '2024-09-01', end: '2028-08-31', institution: 'Trinity College Dublin' },
+  {
+    name: 'Yibin Xie',
+    group: 'phd',
+    start: '2024-09-01',
+    end: '2028-08-31',
+    institution: 'Trinity College Dublin',
+    topic: 'AI-based communication systems for smart grid networks',
+  },
   {
     name: 'Zainab Safdar',
     group: 'phd',
     start: '2025-01-01',
     end: '2029-12-31',
-    topic: 'AI-powered in-vitro and in-cell (IVIC) correlation model for drug/product efficacy testing of anticancer drugs',
+    topic:
+      'AI-powered in-vitro and in-cell (IVIC) correlation model for drug/product efficacy testing of anticancer drugs: a digital and greener route',
     links: [{ label: 'LinkedIn', href: 'https://ie.linkedin.com/in/zainab-s-b63807278' }],
   },
-  { name: 'Claumar Koukouta', group: 'phd', start: '2026-10-01', end: '2029-09-30' },
+  {
+    name: 'Claumar Koukouta',
+    group: 'phd',
+    start: '2026-10-01',
+    end: '2029-09-30',
+    role: 'QUESTING doctoral candidate',
+    note: 'MSc in Embedded Electronic Systems, ESIGELEC, Rouen; previously worked in machine-learning engineering.',
+    projects: ['QUESTING'],
+    links: [{ label: 'QUESTING profile', href: 'https://questing-project.eu/dt_team/claumar-bienvenu-koukouta/' }],
+  },
   { name: 'Orla Kavanagh', group: 'phd', start: '2026-10-01', end: '2030-09-30' },
-  { name: 'Davide Fallara', group: 'phd', start: '2026-11-01', end: '2029-10-31' },
+  {
+    name: 'Davide Fallara',
+    group: 'phd',
+    start: '2026-11-01',
+    end: '2029-10-31',
+    role: 'QUESTING doctoral candidate',
+    note: 'MSc in Physics of Complex Systems, University of Turin.',
+    projects: ['QUESTING'],
+    links: [{ label: 'QUESTING profile', href: 'https://questing-project.eu/dt_team/davide-fallara/' }],
+  },
   { name: 'Mostafa Ragab', group: 'phd', start: '2026-12-01', end: '2029-11-30' },
 
   // Masters by Research
@@ -330,7 +361,9 @@ export const TEAM: Member[] = [
     group: 'masters',
     start: '2025-07-01',
     end: '2027-06-30',
-    topic: 'AI for dairy-farm sustainability and decarbonisation',
+    topic:
+      'Industry-level data integration and development of a digital sustainability platform and decision support tool for agricultural production systems in Ireland',
+    projects: ['AgNav'],
   },
 
   // Postdoctoral fellows
@@ -338,14 +371,17 @@ export const TEAM: Member[] = [
     name: 'Ilias Cherkaoui',
     group: 'postdoc',
     start: '2025-01-01',
-    topic: 'Post-quantum cryptography and physical-layer security',
+    topic: 'Quantum-proofing AI (AIQ-Shield): a zero-trust approach',
+    role: 'TU RISE Postdoctoral Fellow; co-supervises QUESTING doctoral candidates',
     note: 'PhD in chaos theory and cryptography, Mohammed V University, Rabat (2023).',
+    projects: ['AIQ-Shield', 'QUESTING'],
   },
   {
     name: 'Priyalakshmi Sheela',
     group: 'postdoc',
     start: '2025-08-01',
-    topic: 'Anomaly detection in network traffic',
+    topic: 'AI-aided wavelet transform for denoising signals (ANODE)',
+    projects: ['ANODE'],
   },
   {
     name: 'Mohamed Khalafalla Hassan',
@@ -353,6 +389,7 @@ export const TEAM: Member[] = [
     start: '2025-09-01',
     topic: 'Resilience of virtualised and software-defined 6G networks',
     role: 'Collaborator, and also a Lecturer at National College of Ireland',
+    projects: ['PlastG'],
     links: [orcid('0000-0002-6238-8915')],
   },
   {
@@ -362,6 +399,7 @@ export const TEAM: Member[] = [
     institution: 'Trinity College Dublin',
     topic: 'Robustness of heterogeneous wireless networks',
     note: 'Earlier work on UAV- and RIS-assisted networks for disaster response.',
+    projects: ['PlastG'],
     links: [orcid('0000-0001-5824-3687')],
   },
   {
@@ -375,6 +413,7 @@ export const TEAM: Member[] = [
     group: 'postdoc',
     start: '2026-09-01',
     topic: 'Mathematician with a PhD in commutative algebra',
+    projects: ['PlastG'],
     links: [{ label: 'LinkedIn', href: 'https://ie.linkedin.com/in/peterphelanalgebra' }],
   },
 
@@ -384,7 +423,8 @@ export const TEAM: Member[] = [
     group: 'phd',
     start: '2022-10-01',
     institution: 'Trinity College Dublin',
-    topic: 'Reconfigurable intelligent surfaces and movable antennas for wireless communication',
+    topic: 'Medium access control for AI-aided reflective intelligent surfaces',
+    funding: 'China Scholarship Council, with support from CONNECT and COALESCE',
     graduated: '2026',
   },
   {
@@ -443,7 +483,7 @@ export const SUPERVISION_SUMMARY = {
   currentPostdocs: count('postdoc'),
   // Two earlier graduates (from the CV, not listed by name) plus those above.
   graduatedPhd: 2 + TEAM.filter((m) => m.graduated).length,
-  note: 'The postdoctoral fellows include a TU RISE Fellow.',
+  note: 'The group includes a TU RISE Postdoctoral Fellow and doctoral candidates in the MSCA QUESTING network.',
   topics:
     'Topics range from quantum network tomography and post-quantum cryptography to resilient 6G networks, AI for health and AI for dairy-farm sustainability.',
 };
