@@ -259,7 +259,7 @@ export interface Link {
 export interface Member {
   name: string;
   group: TeamGroup;
-  start: string; // YYYY-MM-DD, joined the team
+  start?: string; // YYYY-MM-DD, joined the team (may be unknown for graduates)
   end?: string; // YYYY-MM-DD, expected completion (students only)
   institution?: string; // only when it is not SETU
   topic?: string;
@@ -268,7 +268,7 @@ export interface Member {
   links?: Link[]; // the first link is also used on the person's name
   projects?: string[]; // project names from src/data/projects.ts
   funding?: string; // how the post is funded, if not by a listed project
-  graduated?: string; // year the PhD thesis was defended
+  graduated?: string | true; // year the PhD thesis was defended, or true if the year isn't listed
   departed?: { date: string; destination: string };
 }
 
@@ -279,6 +279,8 @@ export const TEAM_GROUPS: { id: TeamGroup; label: string; one: string }[] = [
 ];
 
 const orcid = (id: string): Link => ({ label: 'ORCID', href: `https://orcid.org/${id}` });
+const scholar = (id: string): Link => ({ label: 'Google Scholar', href: `https://scholar.google.com/citations?user=${id}` });
+const linkedin = (slug: string): Link => ({ label: 'LinkedIn', href: `https://www.linkedin.com/in/${slug}/` });
 
 // Thesis and project titles come from Dr Dey's CV; other details from each
 // person's public profile, the project websites or their papers with Dr Dey.
@@ -293,7 +295,11 @@ export const TEAM: Member[] = [
     institution: 'Maynooth University',
     topic: 'Bayesian game theory-based protocols for resource sharing among massive numbers of IoT devices',
     funding: 'Research Ireland platform funding through CONNECT',
-    links: [{ label: 'CONNECT profile', href: 'https://connectcentre.ie/people/nirmal-wickramasinghe' }],
+    links: [
+      { label: 'CONNECT profile', href: 'https://connectcentre.ie/people/nirmal-wickramasinghe' },
+      scholar('qx-i8RMAAAAJ'),
+      linkedin('nirmal-wickramasinghe'),
+    ],
   },
   {
     name: 'Athira Kalavampara Raghunadhan',
@@ -304,7 +310,10 @@ export const TEAM: Member[] = [
     topic: 'Agent-based modelling for quantum network tomography',
     role: 'Co-supervised with Prof. Nicola Marchetti',
     projects: ['CoQREATE'],
-    links: [{ label: 'CONNECT profile', href: 'https://connectcentre.ie/people/athira-kalavampara-raghunadhan' }],
+    links: [
+      { label: 'CONNECT profile', href: 'https://connectcentre.ie/people/athira-kalavampara-raghunadhan' },
+      scholar('lgz807oAAAAJ'),
+    ],
   },
   {
     name: 'Malik Faizan',
@@ -313,7 +322,7 @@ export const TEAM: Member[] = [
     end: '2028-12-31',
     topic: 'Automated music therapy for anxiety and depression management in older people',
     note: 'MTech in Control and Instrumentation Systems, Jamia Millia Islamia, New Delhi.',
-    links: [orcid('0009-0009-6602-3815')],
+    links: [scholar('1rU30VYAAAAJ'), orcid('0009-0009-6602-3815'), linkedin('malik-faizan-a828a816b')],
   },
   {
     name: 'Yibin Xie',
@@ -337,23 +346,44 @@ export const TEAM: Member[] = [
     group: 'phd',
     start: '2026-10-01',
     end: '2029-09-30',
-    role: 'QUESTING doctoral candidate',
+    topic: 'Distributed decision making for complex quantum networks',
+    role: 'Co-supervised with Dr Ilias Cherkaoui and Dr Brenda Murphy',
     note: 'MSc in Embedded Electronic Systems, ESIGELEC, Rouen; previously worked in machine-learning engineering.',
     projects: ['QUESTING'],
     links: [{ label: 'QUESTING profile', href: 'https://questing-project.eu/dt_team/claumar-bienvenu-koukouta/' }],
   },
-  { name: 'Orla Kavanagh', group: 'phd', start: '2026-10-01', end: '2030-09-30' },
+  {
+    name: 'Orla Kavanagh',
+    group: 'phd',
+    start: '2026-10-01',
+    end: '2030-09-30',
+    topic:
+      'Category-theoretic and AI-enabled forensic analysis of obfuscation relay boxes (ORBs) in classical backbone networks (CYBERION)',
+    role: 'Principal supervisor Dr John Sheppard (ForSec@SETU), co-supervised by Dr Dey',
+    note: 'Detects and tracks the relay networks that state-sponsored attackers use to hide their traffic, combining TLS fingerprinting, category theory and physics-informed neural networks. MSc in Data Analytics, CCT College Dublin.',
+    funding: 'a SETU PhD Scholarship',
+    links: [linkedin('orla-kavanagh-8284bb78')],
+  },
   {
     name: 'Davide Fallara',
     group: 'phd',
     start: '2026-11-01',
     end: '2029-10-31',
-    role: 'QUESTING doctoral candidate',
+    topic: 'Capacity bounds of realistic co-existing classical–quantum networks',
+    role: 'Co-supervised with Dr Ilias Cherkaoui and Dr Brenda Murphy',
     note: 'MSc in Physics of Complex Systems, University of Turin.',
     projects: ['QUESTING'],
     links: [{ label: 'QUESTING profile', href: 'https://questing-project.eu/dt_team/davide-fallara/' }],
   },
-  { name: 'Mostafa Ragab', group: 'phd', start: '2026-12-01', end: '2029-11-30' },
+  {
+    name: 'Mostafa Ragab',
+    group: 'phd',
+    start: '2026-12-01',
+    end: '2029-11-30',
+    topic: 'Self-optimizing and self-healing implanted communication network',
+    role: 'Co-supervised with Dr Priyalakshmi Sheela',
+    projects: ['BRAINET'],
+  },
 
   // Masters by Research
   {
@@ -375,13 +405,17 @@ export const TEAM: Member[] = [
     role: 'TU RISE Postdoctoral Fellow; co-supervises QUESTING doctoral candidates',
     note: 'PhD in chaos theory and cryptography, Mohammed V University, Rabat (2023).',
     projects: ['AIQ-Shield', 'QUESTING'],
+    links: [scholar('bA0j7UcAAAAJ')],
   },
   {
     name: 'Priyalakshmi Sheela',
     group: 'postdoc',
     start: '2025-08-01',
     topic: 'AI-aided wavelet transform for denoising signals (ANODE)',
-    projects: ['ANODE'],
+    role: 'Co-supervises a BRAINET doctoral candidate',
+    note: 'PhD in biomedical signal processing, National Institute of Technology Calicut.',
+    projects: ['ANODE', 'BRAINET'],
+    links: [linkedin('dr-priyalakshmi-sheela-363536159')],
   },
   {
     name: 'Mohamed Khalafalla Hassan',
@@ -390,7 +424,7 @@ export const TEAM: Member[] = [
     topic: 'Resilience of virtualised and software-defined 6G networks',
     role: 'Collaborator, and also a Lecturer at National College of Ireland',
     projects: ['PlastG'],
-    links: [orcid('0000-0002-6238-8915')],
+    links: [scholar('QWpKug4AAAAJ'), orcid('0000-0002-6238-8915')],
   },
   {
     name: 'Sayanti Ghosh',
@@ -400,13 +434,22 @@ export const TEAM: Member[] = [
     topic: 'Robustness of heterogeneous wireless networks',
     note: 'Earlier work on UAV- and RIS-assisted networks for disaster response.',
     projects: ['PlastG'],
-    links: [orcid('0000-0001-5824-3687')],
+    links: [scholar('GNHNK9EAAAAJ'), orcid('0000-0001-5824-3687'), linkedin('dr-sayanti-ghosh-994227214')],
   },
   {
-    name: 'Tamas Grosz',
+    name: 'Tamás Grósz',
     group: 'postdoc',
     start: '2026-01-02',
+    topic: 'Sensor placement optimisation and AI models of how environmental pollution affects human health',
     role: 'Collaborator, and also a Lecturer at SETU',
+    note: 'PhD in Informatics, University of Szeged; previously a postdoctoral researcher at Aalto University (2019–2025) and a visiting research fellow at Trinity College Dublin.',
+    projects: ['ENACT'],
+    links: [
+      { label: 'SETU profile', href: 'https://research.setu.ie/en/persons/tam%C3%A1s-gr%C3%B3sz/' },
+      scholar('RCUa8MAAAAAJ'),
+      orcid('0000-0001-7918-9579'),
+      linkedin('tam%C3%A1s-gr%C3%B3sz-950a049a'),
+    ],
   },
   {
     name: 'Peter Phelan',
@@ -423,16 +466,26 @@ export const TEAM: Member[] = [
     group: 'phd',
     start: '2022-10-01',
     institution: 'Trinity College Dublin',
-    topic: 'Medium access control for AI-aided reflective intelligent surfaces',
+    topic: 'Movable antenna-enhanced reconfigurable intelligent surfaces for next-generation wireless networks',
+    role: 'Co-supervised with Prof. Nicola Marchetti',
     funding: 'China Scholarship Council, with support from CONNECT and COALESCE',
     graduated: '2026',
+  },
+  {
+    name: 'Rahul Umesh Mhapsekar',
+    group: 'phd',
+    topic: 'IoT platform for milk quality monitoring',
+    note: 'Built edge-AI methods for real-time milk-quality analysis and adulteration detection, including the AppAdapt-LWDL framework (IEEE Transactions on Mobile Computing). Now a postdoctoral researcher at SETU.',
+    funding: 'the VistaMilk Research Centre',
+    links: [scholar('vO6uxQwAAAAJ'), orcid('0000-0002-3420-3231'), linkedin('rahul-mhapsekar-334018129')],
+    graduated: true,
   },
   {
     name: 'Omer Ali',
     group: 'postdoc',
     start: '2025-01-01',
     topic: 'Lightweight machine learning and energy-efficient IoT devices',
-    links: [orcid('0000-0002-0114-0457')],
+    links: [scholar('G0qC3yEAAAAJ'), orcid('0000-0002-0114-0457'), linkedin('omerali')],
     departed: { date: '2025-04-30', destination: 'Now a lecturer and researcher in higher education in Ireland.' },
   },
 ];
@@ -440,7 +493,7 @@ export const TEAM: Member[] = [
 // Status is worked out when the site is built, so someone due to join moves
 // into the current team at the next rebuild after their start date.
 const today = new Date().toISOString().slice(0, 10);
-export const isIncoming = (m: Member) => m.start > today;
+export const isIncoming = (m: Member) => Boolean(m.start && m.start > today);
 export const isFormer = (m: Member) => Boolean(m.graduated || (m.departed && m.departed.date <= today));
 export const isCurrent = (m: Member) => !isIncoming(m) && !isFormer(m);
 
@@ -465,14 +518,16 @@ export const photoSlug = (name: string) =>
 
 /** A short line such as "2023 to 2026" or "Joining December 2026". */
 export function tenure(m: Member): string {
-  if (isIncoming(m)) return `Joining ${monthYear(m.start)}`;
+  if (isIncoming(m)) return `Joining ${monthYear(m.start!)}`;
+  const a = m.start ? year(m.start) : undefined;
   if (isFormer(m)) {
-    const a = year(m.start);
-    const b = m.graduated ?? year(m.departed!.date);
-    return a === b ? a : `${a} to ${b}`;
+    const b = typeof m.graduated === 'string' ? m.graduated : m.departed ? year(m.departed.date) : undefined;
+    if (a && b) return a === b ? a : `${a} to ${b}`;
+    return b ?? a ?? '';
   }
-  if (m.end) return `${year(m.start)} to ${year(m.end)}`;
-  return `Since ${year(m.start)}`;
+  if (!a) return '';
+  if (m.end) return `${a} to ${year(m.end)}`;
+  return `Since ${a}`;
 }
 
 const count = (g: TeamGroup) => TEAM.filter((m) => m.group === g && isCurrent(m)).length;
@@ -481,8 +536,8 @@ export const SUPERVISION_SUMMARY = {
   currentPhd: count('phd'),
   currentMasters: count('masters'),
   currentPostdocs: count('postdoc'),
-  // Two earlier graduates (from the CV, not listed by name) plus those above.
-  graduatedPhd: 2 + TEAM.filter((m) => m.graduated).length,
+  // One earlier graduate (from the CV, not listed by name) plus those above.
+  graduatedPhd: 1 + TEAM.filter((m) => m.graduated).length,
   note: 'The group includes a TU RISE Postdoctoral Fellow and doctoral candidates in the MSCA QUESTING network.',
   topics:
     'Topics range from quantum network tomography and post-quantum cryptography to resilient 6G networks, AI for health and AI for dairy-farm sustainability.',

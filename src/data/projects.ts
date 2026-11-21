@@ -31,7 +31,7 @@ export const PROJECTS: Project[] = [
     role: 'Coordinator',
     period: 'December 2025 to November 2029',
     summary:
-      'Trains 15 doctoral candidates as innovators in quantum networks, hybrid classical–quantum systems and co-design, with eight other universities and 11 associated partners including Airbus Defence and Space, BT and Telecom Italia. Research covers entanglement optimisation, fault-tolerant design and resource-efficient hybrid systems, using small-world network models, Bayesian optimisation and quantum game theory.',
+      'Trains 15 doctoral candidates as innovators in quantum networks, hybrid classical–quantum systems and co-design, with eight other universities and 11 associated partners including Airbus Defence and Space, BT and Telecom Italia. Research covers entanglement optimisation, fault-tolerant design and resource-efficient hybrid systems, using small-world network models, Bayesian optimisation and quantum game theory. SETU hosts doctoral projects on distributed decision making for quantum networks and on the capacity of co-existing classical–quantum networks.',
     links: [
       { label: 'Project website', href: 'https://questing-project.eu/' },
       { label: 'CORDIS record', href: 'https://cordis.europa.eu/project/id/101227218' },
@@ -61,7 +61,7 @@ export const PROJECTS: Project[] = [
     role: 'Principal Investigator at SETU',
     period: 'January 2026 to December 2029',
     summary:
-      'Develops skull-implantable stimulation hubs that form a self-organising wireless network, as a less invasive alternative to deep brain stimulation. SETU contributes the wireless architectures and cross-layer optimisation, and hosts the doctoral project on self-optimising and self-healing implant networks. Coordinated by the Medical Center – University of Freiburg.',
+      'Develops skull-implantable stimulation hubs that form a self-organising wireless network, as a less invasive alternative to deep brain stimulation. SETU contributes the wireless architectures and cross-layer optimisation, and hosts the doctoral project on self-optimising and self-healing implanted communication networks. Coordinated by the Medical Center – University of Freiburg.',
     links: [
       { label: 'Project website', href: 'https://www.brainet-dn.eu/' },
       { label: 'CORDIS record', href: 'https://cordis.europa.eu/project/id/101225775' },

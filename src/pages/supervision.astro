@@ -108,7 +108,11 @@ const lines = (...xs: (string | undefined | false)[]) => xs.filter(Boolean) as s
                 <h3>{m.links?.length ? <a href={m.links[0].href}>{m.name}</a> : m.name}</h3>
                 {m.topic && <p class="topic">{m.topic}</p>}
                 <p class="meta">
-                  {lines(m.graduated ? `PhD, ${tenure(m)}` : `${oneOf(m.group)}, ${tenure(m)}`, m.institution).map(
+                  {lines(
+                    [m.graduated ? 'PhD' : oneOf(m.group), tenure(m)].filter(Boolean).join(', '),
+                    m.institution,
+                    m.role,
+                  ).map(
                     (line, i) => (
                       <>
                         {i > 0 && <br />}
@@ -118,7 +122,14 @@ const lines = (...xs: (string | undefined | false)[]) => xs.filter(Boolean) as s
                   )}
                 </p>
                 {m.funding && <p class="meta">Funded by {m.funding}</p>}
-                <p>{m.graduated ? `Thesis defended in ${m.graduated}.` : m.departed!.destination}</p>
+                {m.note && <p>{m.note}</p>}
+                <p>
+                  {m.graduated
+                    ? typeof m.graduated === 'string'
+                      ? `Thesis defended in ${m.graduated}.`
+                      : 'Thesis defended.'
+                    : m.departed!.destination}
+                </p>
                 {m.links && m.links.length > 0 && (
                   <p class="links">
                     {m.links.map((l) => (
