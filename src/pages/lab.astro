@@ -2,14 +2,25 @@
 import Base from '../layouts/Base.astro';
 import ThemeCard from '../components/ThemeCard.astro';
 import PucaMark from '../components/PucaMark.astro';
+import TeamPhoto from '../components/TeamPhoto.astro';
+import Portrait from '../components/Portrait.astro';
 import { SITE } from '../site.config';
 import { THEMES } from '../data/themes';
 import { PUBLICATIONS } from '../data/publications';
-import { SUPERVISION, SUPERVISION_SUMMARY as SUM } from '../data/profile';
+import { TEAM, TEAM_GROUPS, SUPERVISION_SUMMARY as SUM, isCurrent, isIncoming, tenure } from '../data/profile';
 import { url } from '../utils';
 
 const countFor = (id: string) => PUBLICATIONS.filter((p) => p.themes.includes(id as never)).length;
 const { lab } = SITE;
+
+const groups = TEAM_GROUPS.map((g) => ({
+  ...g,
+  members: [
+    ...TEAM.filter((m) => m.group === g.id && isCurrent(m)),
+    ...TEAM.filter((m) => m.group === g.id && isIncoming(m)),
+  ],
+})).filter((g) => g.members.length);
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 ---
 
 <Base title={lab.name} description={`${lab.name}: ${lab.tagline} Dr Indrakshi Dey’s research group at South East Technological University.`}>
@@ -53,21 +64,39 @@ const { lab } = SITE;
       <a href={url('/supervision/')}>Supervision</a>
     </div>
     <p class="count">
-      Dr Dey currently supervises {SUM.currentPhd} PhD students and {SUM.currentPostdocs} postdoctoral fellows, and has
-      graduated {SUM.graduatedPhd} PhD students.
+      Dr Dey currently supervises {plural(SUM.currentPhd, 'PhD student', 'PhD students')},{' '}
+      {plural(SUM.currentMasters, 'Masters by Research student', 'Masters by Research students')} and{' '}
+      {plural(SUM.currentPostdocs, 'postdoctoral fellow', 'postdoctoral fellows')}, and has graduated{' '}
+      {plural(SUM.graduatedPhd, 'PhD student', 'PhD students')}.
     </p>
-    <ul>
-      <li>
+    <div class="pi">
+      <Portrait size={64} />
+      <div>
         <h3>Dr Indrakshi Dey</h3>
         <p class="topic">Principal Investigator</p>
-      </li>
-      {SUPERVISION.map((s) => (
-        <li>
-          <h3>{s.href ? <a href={s.href}>{s.name}</a> : s.name}</h3>
-          <p class="topic">{s.degree} researcher: {s.topic}</p>
-        </li>
-      ))}
-    </ul>
+      </div>
+    </div>
+    {
+      groups.map((g) => (
+        <div class="team-group">
+          <h3 class="group-title">{g.members.length === 1 ? g.one : g.label}</h3>
+          <ul>
+            {g.members.map((m) => (
+              <li>
+                <TeamPhoto name={m.name} size={48} />
+                <div>
+                  <p class="name">{m.links?.length ? <a href={m.links[0].href}>{m.name}</a> : m.name}</p>
+                  {m.topic && <p class="what">{m.topic}</p>}
+                  {[m.institution, m.role, isIncoming(m) && tenure(m)].filter(Boolean).map((line) => (
+                    <p class="where">{line}</p>
+                  ))}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
   </section>
 
   <section class="section panel join" aria-labelledby="join">
@@ -162,29 +191,75 @@ const { lab } = SITE;
     color: var(--muted);
   }
 
-  .people ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+  .pi {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
     max-width: 48rem;
-  }
-
-  .people li {
     padding-block: 1rem;
-    border-top: 1px solid var(--rule);
+    border-block: 1px solid var(--rule);
   }
 
-  .people li:last-child {
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .people h3 {
+  .pi h3 {
     margin: 0 0 0.2rem;
     font-size: var(--step-1);
   }
 
-  .people p {
+  .pi p {
     margin: 0;
+  }
+
+  .team-group {
+    margin-top: 2rem;
+  }
+
+  .group-title {
+    margin: 0 0 0.5rem;
+    font-family: var(--sans);
+    font-size: var(--step-0);
+    font-weight: 650;
+    color: var(--muted);
+  }
+
+  .team-group ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+    gap: 0 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .team-group li {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    padding-block: 0.85rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .team-group li > div {
+    min-width: 0;
+  }
+
+  .what {
+    margin: 0.2rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .name {
+    margin: 0;
+    font-family: var(--display);
+    font-size: var(--step-1);
+    font-weight: 520;
+    line-height: 1.25;
+  }
+
+  .where {
+    margin: 0.15rem 0 0;
+    color: var(--muted);
+    font-size: 0.875rem;
   }
 
   .topic {

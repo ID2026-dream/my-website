@@ -1,19 +1,41 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SUPERVISION, SUPERVISION_SUMMARY as SUM } from '../data/profile';
+import TeamPhoto from '../components/TeamPhoto.astro';
+import {
+  TEAM,
+  TEAM_GROUPS,
+  SUPERVISION_SUMMARY as SUM,
+  isCurrent,
+  isIncoming,
+  isFormer,
+  tenure,
+} from '../data/profile';
 
-const degrees = [...new Set(SUPERVISION.map((s) => s.degree))];
+const groups = TEAM_GROUPS.map((g) => ({
+  ...g,
+  members: [
+    ...TEAM.filter((m) => m.group === g.id && isCurrent(m)),
+    ...TEAM.filter((m) => m.group === g.id && isIncoming(m)),
+  ],
+})).filter((g) => g.members.length);
+const former = [...TEAM.filter((m) => m.graduated), ...TEAM.filter((m) => isFormer(m) && !m.graduated)];
+const oneOf = (id: string) => TEAM_GROUPS.find((g) => g.id === id)!.one;
+const lines = (...xs: (string | undefined | false)[]) => xs.filter(Boolean) as string[];
 ---
 
 <Base
   icon="people"
   title="Supervision"
   heading="Supervision"
-  lede="PhD students and postdoctoral fellows at SETU and partner universities."
+  lede="PhD students, Masters by Research students and postdoctoral fellows at SETU and partner universities."
 >
   <section class="summary panel" aria-label="Supervision at a glance">
     <ul>
       <li><strong data-count={SUM.currentPhd}>{SUM.currentPhd}</strong> current PhD students</li>
+      <li>
+        <strong data-count={SUM.currentMasters}>{SUM.currentMasters}</strong>{' '}
+        {SUM.currentMasters === 1 ? 'Masters by Research student' : 'Masters by Research students'}
+      </li>
       <li><strong data-count={SUM.currentPostdocs}>{SUM.currentPostdocs}</strong> postdoctoral fellows</li>
       <li><strong data-count={SUM.graduatedPhd}>{SUM.graduatedPhd}</strong> PhD graduates</li>
     </ul>
@@ -21,35 +43,75 @@ const degrees = [...new Set(SUPERVISION.map((s) => s.degree))];
   </section>
 
   {
-    degrees.map((degree) => (
-      <section class="group" aria-labelledby={`d-${degree}`}>
-        <h2 id={`d-${degree}`}>{degree} researchers</h2>
+    groups.map((g) => (
+      <section class="group" aria-labelledby={`g-${g.id}`}>
+        <h2 id={`g-${g.id}`}>{g.members.length === 1 ? g.one : g.label}</h2>
         <ul>
-          {SUPERVISION.filter((s) => s.degree === degree).map((s) => (
-            <li>
-              <h3>{s.href ? <a href={s.href}>{s.name}</a> : s.name}</h3>
-              <p class="topic">{s.topic}</p>
-              <p class="meta">
-                {s.institution && (
-                  <>
-                    {s.institution}
-                    <br />
-                  </>
+          {g.members.map((m) => (
+            <li class="person">
+              <TeamPhoto name={m.name} size={64} />
+              <div>
+                <h3>{m.links?.length ? <a href={m.links[0].href}>{m.name}</a> : m.name}</h3>
+                {m.topic && <p class="topic">{m.topic}</p>}
+                <p class="meta">
+                  {lines(m.institution, m.role, tenure(m)).map((line, i) => (
+                    <>
+                      {i > 0 && <br />}
+                      {line}
+                    </>
+                  ))}
+                </p>
+                {m.note && <p>{m.note}</p>}
+                {m.links && m.links.length > 0 && (
+                  <p class="links">
+                    {m.links.map((l) => (
+                      <a href={l.href}>{l.label}</a>
+                    ))}
+                  </p>
                 )}
-                {s.role}
-                {s.status && (
-                  <>
-                    <br />
-                    {s.status}
-                  </>
-                )}
-              </p>
-              {s.note && <p>{s.note}</p>}
+              </div>
             </li>
           ))}
         </ul>
       </section>
     ))
+  }
+
+  {
+    former.length > 0 && (
+      <section class="group" aria-labelledby="g-former">
+        <h2 id="g-former">Graduates and former members</h2>
+        <ul>
+          {former.map((m) => (
+            <li class="person">
+              <TeamPhoto name={m.name} size={64} />
+              <div>
+                <h3>{m.links?.length ? <a href={m.links[0].href}>{m.name}</a> : m.name}</h3>
+                {m.topic && <p class="topic">{m.topic}</p>}
+                <p class="meta">
+                  {lines(m.graduated ? `PhD, ${tenure(m)}` : `${oneOf(m.group)}, ${tenure(m)}`, m.institution).map(
+                    (line, i) => (
+                      <>
+                        {i > 0 && <br />}
+                        {line}
+                      </>
+                    ),
+                  )}
+                </p>
+                <p>{m.graduated ? `Thesis defended in ${m.graduated}.` : m.departed!.destination}</p>
+                {m.links && m.links.length > 0 && (
+                  <p class="links">
+                    {m.links.map((l) => (
+                      <a href={l.href}>{l.label}</a>
+                    ))}
+                  </p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
   }
 </Base>
 
@@ -126,6 +188,23 @@ const degrees = [...new Set(SUPERVISION.map((s) => s.degree))];
 
   .meta {
     color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .person {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .person > div {
+    min-width: 0;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
     font-size: 0.9375rem;
   }
 </style>

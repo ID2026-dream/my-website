@@ -246,42 +246,204 @@ export const OUTREACH: Entry[] = [
   },
 ];
 
-// ---- Supervision ---------------------------------------------------------
-export const SUPERVISION_SUMMARY = {
-  currentPhd: 7,
-  currentPostdocs: 5,
-  graduatedPhd: 2,
-  note: 'A third PhD completes in November 2026. The postdoctoral fellows include a TU RISE Fellow.',
-  topics:
-    'Topics range from quantum network tomography to game-theoretic resource sharing and medium access control.',
-};
+// ---- Team (PhD, Masters by Research and postdoctoral) ----------------------
+// From the team return of November 2026. Only names, roles, institutions and
+// dates are published; nothing personal from the return goes on the site.
+export type TeamGroup = 'phd' | 'masters' | 'postdoc';
 
-export interface Student {
-  name: string;
-  degree: string;
-  institution?: string;
-  topic: string;
-  role: string; // e.g. 'Supervisor' or 'Co-supervisor with ...'
-  status?: string; // e.g. 'Completing November 2026'
-  note?: string;
-  href?: string;
+export interface Link {
+  label: string; // e.g. 'ORCID', 'CONNECT profile', 'LinkedIn'
+  href: string;
 }
 
-export const SUPERVISION: Student[] = [
+export interface Member {
+  name: string;
+  group: TeamGroup;
+  start: string; // YYYY-MM-DD, joined the team
+  end?: string; // YYYY-MM-DD, expected completion (students only)
+  institution?: string; // only when it is not SETU
+  topic?: string;
+  role?: string; // e.g. 'Co-supervised with ...'
+  note?: string;
+  links?: Link[]; // the first link is also used on the person's name
+  graduated?: string; // year the PhD thesis was defended
+  departed?: { date: string; destination: string };
+}
+
+export const TEAM_GROUPS: { id: TeamGroup; label: string; one: string }[] = [
+  { id: 'phd', label: 'PhD students', one: 'PhD student' },
+  { id: 'masters', label: 'Masters by Research students', one: 'Masters by Research student' },
+  { id: 'postdoc', label: 'Postdoctoral fellows', one: 'Postdoctoral fellow' },
+];
+
+const orcid = (id: string): Link => ({ label: 'ORCID', href: `https://orcid.org/${id}` });
+
+// Topics come from each person's public profile or from their papers with
+// Dr Dey. Links are only given where the profile is clearly the same person.
+export const TEAM: Member[] = [
+  // PhD students
   {
     name: 'Nirmal D. Wickramasinghe',
-    degree: 'PhD',
-    topic: 'Bayesian-game and auction-based resource allocation for dense IoT networks',
-    role: 'Supervisor',
-    status: 'Completing November 2026',
+    group: 'phd',
+    start: '2023-01-01',
+    end: '2026-12-31',
+    institution: 'Maynooth University',
+    topic: 'Game-theoretic and auction-based resource sharing for dense IoT networks',
+    links: [{ label: 'CONNECT profile', href: 'https://connectcentre.ie/people/nirmal-wickramasinghe' }],
   },
   {
     name: 'Athira Kalavampara Raghunadhan',
-    degree: 'PhD',
+    group: 'phd',
+    start: '2023-01-15',
+    end: '2026-12-15',
     institution: 'CONNECT, Trinity College Dublin',
     topic: 'Quantum network tomography',
-    role: 'Co-supervisor, with Prof. Nicola Marchetti',
+    role: 'Co-supervised with Prof. Nicola Marchetti',
     note: 'Part of CoQREATE, the Convergent Quantum Research Alliance in Telecommunications.',
-    href: 'https://connectcentre.ie/people/athira-kalavampara-raghunadhan',
+    links: [{ label: 'CONNECT profile', href: 'https://connectcentre.ie/people/athira-kalavampara-raghunadhan' }],
+  },
+  {
+    name: 'Malik Faizan',
+    group: 'phd',
+    start: '2024-01-01',
+    end: '2028-12-31',
+    topic: 'Automated music therapy for anxiety and depression in older people',
+    links: [orcid('0009-0009-6602-3815')],
+  },
+  { name: 'Yibin Xie', group: 'phd', start: '2024-09-01', end: '2028-08-31', institution: 'Trinity College Dublin' },
+  {
+    name: 'Zainab Safdar',
+    group: 'phd',
+    start: '2025-01-01',
+    end: '2029-12-31',
+    topic: 'AI-powered in-vitro and in-cell (IVIC) correlation model for drug/product efficacy testing of anticancer drugs',
+    links: [{ label: 'LinkedIn', href: 'https://ie.linkedin.com/in/zainab-s-b63807278' }],
+  },
+  { name: 'Claumar Koukouta', group: 'phd', start: '2026-10-01', end: '2029-09-30' },
+  { name: 'Orla Kavanagh', group: 'phd', start: '2026-10-01', end: '2030-09-30' },
+  { name: 'Davide Fallara', group: 'phd', start: '2026-11-01', end: '2029-10-31' },
+  { name: 'Mostafa Ragab', group: 'phd', start: '2026-12-01', end: '2029-11-30' },
+
+  // Masters by Research
+  {
+    name: 'Surya Jayakumar',
+    group: 'masters',
+    start: '2025-07-01',
+    end: '2027-06-30',
+    topic: 'AI for dairy-farm sustainability and decarbonisation',
+  },
+
+  // Postdoctoral fellows
+  {
+    name: 'Ilias Cherkaoui',
+    group: 'postdoc',
+    start: '2025-01-01',
+    topic: 'Post-quantum cryptography and physical-layer security',
+    note: 'PhD in chaos theory and cryptography, Mohammed V University, Rabat (2023).',
+  },
+  {
+    name: 'Priyalakshmi Sheela',
+    group: 'postdoc',
+    start: '2025-08-01',
+    topic: 'Anomaly detection in network traffic',
+  },
+  {
+    name: 'Mohamed Khalafalla Hassan',
+    group: 'postdoc',
+    start: '2025-09-01',
+    topic: 'Resilience of virtualised and software-defined 6G networks',
+    role: 'Collaborator, and also a Lecturer at National College of Ireland',
+    links: [orcid('0000-0002-6238-8915')],
+  },
+  {
+    name: 'Sayanti Ghosh',
+    group: 'postdoc',
+    start: '2025-09-01',
+    institution: 'Trinity College Dublin',
+    topic: 'Robustness of heterogeneous wireless networks',
+    note: 'Earlier work on UAV- and RIS-assisted networks for disaster response.',
+    links: [orcid('0000-0001-5824-3687')],
+  },
+  {
+    name: 'Tamas Grosz',
+    group: 'postdoc',
+    start: '2026-01-02',
+    role: 'Collaborator, and also a Lecturer at SETU',
+  },
+  {
+    name: 'Peter Phelan',
+    group: 'postdoc',
+    start: '2026-09-01',
+    topic: 'Mathematician with a PhD in commutative algebra',
+    links: [{ label: 'LinkedIn', href: 'https://ie.linkedin.com/in/peterphelanalgebra' }],
+  },
+
+  // Graduates and former members
+  {
+    name: 'Yan Zhang',
+    group: 'phd',
+    start: '2022-10-01',
+    institution: 'Trinity College Dublin',
+    topic: 'Reconfigurable intelligent surfaces and movable antennas for wireless communication',
+    graduated: '2026',
+  },
+  {
+    name: 'Omer Ali',
+    group: 'postdoc',
+    start: '2025-01-01',
+    topic: 'Lightweight machine learning and energy-efficient IoT devices',
+    links: [orcid('0000-0002-0114-0457')],
+    departed: { date: '2025-04-30', destination: 'Now a lecturer and researcher in higher education in Ireland.' },
   },
 ];
+
+// Status is worked out when the site is built, so someone due to join moves
+// into the current team at the next rebuild after their start date.
+const today = new Date().toISOString().slice(0, 10);
+export const isIncoming = (m: Member) => m.start > today;
+export const isFormer = (m: Member) => Boolean(m.graduated || (m.departed && m.departed.date <= today));
+export const isCurrent = (m: Member) => !isIncoming(m) && !isFormer(m);
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const year = (d: string) => d.slice(0, 4);
+const monthYear = (d: string) => `${MONTHS[Number(d.slice(5, 7)) - 1]} ${year(d)}`;
+
+/** Initials for the placeholder portrait, e.g. 'NW'. */
+export const initials = (name: string) => {
+  const parts = name.replace(/\./g, '').split(/\s+/);
+  return (parts[0][0] + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase();
+};
+
+/** File name for a member's photo in src/assets/team, e.g. 'yan-zhang'. */
+export const photoSlug = (name: string) =>
+  name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
+/** A short line such as "2023 to 2026" or "Joining December 2026". */
+export function tenure(m: Member): string {
+  if (isIncoming(m)) return `Joining ${monthYear(m.start)}`;
+  if (isFormer(m)) {
+    const a = year(m.start);
+    const b = m.graduated ?? year(m.departed!.date);
+    return a === b ? a : `${a} to ${b}`;
+  }
+  if (m.end) return `${year(m.start)} to ${year(m.end)}`;
+  return `Since ${year(m.start)}`;
+}
+
+const count = (g: TeamGroup) => TEAM.filter((m) => m.group === g && isCurrent(m)).length;
+
+export const SUPERVISION_SUMMARY = {
+  currentPhd: count('phd'),
+  currentMasters: count('masters'),
+  currentPostdocs: count('postdoc'),
+  // Two earlier graduates (from the CV, not listed by name) plus those above.
+  graduatedPhd: 2 + TEAM.filter((m) => m.graduated).length,
+  note: 'The postdoctoral fellows include a TU RISE Fellow.',
+  topics:
+    'Topics range from quantum network tomography and post-quantum cryptography to resilient 6G networks, AI for health and AI for dairy-farm sustainability.',
+};
