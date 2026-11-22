@@ -3,6 +3,11 @@ import Base from '../layouts/Base.astro';
 import EntryList from '../components/EntryList.astro';
 import { MODULES } from '../data/teaching';
 import { TALKS } from '../data/profile';
+import CourseCard from '../components/CourseCard.astro';
+import { getCourses } from '../data/courses';
+import { url } from '../utils';
+
+const courses = await getCourses();
 
 const guest = TALKS.filter((t) => t.what.startsWith('Guest lecture'));
 ---
@@ -27,6 +32,22 @@ const guest = TALKS.filter((t) => t.what.startsWith('Guest lecture'));
     ))}
   </div>
 
+  {
+    courses.length > 0 && (
+      <section class="section" aria-labelledby="reading">
+        <div class="section-head">
+          <h2 id="reading" class="sub">Reading courses</h2>
+          <a href={url('/courses/')}>All reading courses</a>
+        </div>
+        <div class="courses">
+          {courses.map(({ course, units, readingCount }) => (
+            <CourseCard course={course} units={units.length} readings={readingCount} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
   <section class="section" aria-labelledby="guest">
     <h2 id="guest" class="sub">Guest lectures</h2>
     <EntryList entries={guest} />
@@ -37,6 +58,12 @@ const guest = TALKS.filter((t) => t.what.startsWith('Guest lecture'));
   .modules {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr));
+    gap: 1rem;
+  }
+
+  .courses {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 28rem), 1fr));
     gap: 1rem;
   }
 

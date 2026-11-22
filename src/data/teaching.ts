@@ -19,4 +19,13 @@ export const MODULES: Module[] = [
     href: 'https://tutors.dev/course/ai-principles-and-practice',
     linkLabel: 'Open the course on Tutors',
   },
+  {
+    title: 'The Evolution of Machine Learning and AI',
+    level: 'Higher Diploma',
+    summary:
+      'How AI grew from symbolic reasoning to today’s generative systems. One week of history, then current directions: responsible AI as a design constraint, science-inspired models, transformers, scale-free and lean LLMs, and LLMs in software engineering. Part of the Certificate in AI and Machine Learning Engineering within the Higher Diploma in Computer Science.',
+    facts: ['12 weeks', 'Level 8, 5 credits', 'Fully online', 'Assessment lead'],
+    href: 'https://tutors.dev/course/aiml-evolution',
+    linkLabel: 'Open the course on Tutors',
+  },
 ];

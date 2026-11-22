@@ -1,0 +1,101 @@
+---
+// Typography for long-form text written in Markdown (course notes).
+---
+
+<div class="prose"><slot /></div>
+
+<style>
+  .prose {
+    max-width: var(--measure);
+  }
+
+  .prose :global(> * + *) {
+    margin-top: 1rem;
+  }
+
+  .prose :global(> :first-child) {
+    margin-top: 0;
+  }
+
+  .prose :global(h2) {
+    margin: 2.5rem 0 0.75rem;
+    font-size: var(--step-2);
+  }
+
+  .prose :global(h3) {
+    margin: 2rem 0 0.5rem;
+    font-size: var(--step-1);
+  }
+
+  .prose :global(h2 + *),
+  .prose :global(h3 + *) {
+    margin-top: 0;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.4rem;
+  }
+
+  .prose :global(li + li) {
+    margin-top: 0.35rem;
+  }
+
+  .prose :global(blockquote) {
+    margin-inline: 0;
+    padding: 0.25rem 0 0.25rem 1.1rem;
+    border-left: 3px solid var(--signal);
+    color: var(--muted);
+  }
+
+  .prose :global(code) {
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    font-size: 0.9em;
+  }
+
+  .prose :global(pre) {
+    padding: 1rem;
+    overflow-x: auto;
+    border-radius: var(--radius);
+    background: var(--navy);
+    color: var(--on-navy);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .prose :global(pre code) {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+  }
+
+  .prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .prose :global(hr) {
+    margin-block: 2rem;
+    border: 0;
+    border-top: 1px solid var(--rule);
+  }
+</style>

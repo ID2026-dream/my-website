@@ -1,0 +1,215 @@
+---
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Icon from '../../../components/Icon.astro';
+import Prose from '../../../components/Prose.astro';
+import { getCourses } from '../../../data/courses';
+import { url } from '../../../utils';
+
+export async function getStaticPaths() {
+  const list = await getCourses();
+  return list.map((item) => ({ params: { course: item.course.id }, props: item }));
+}
+
+const { course, units, readingCount } = Astro.props;
+const d = course.data;
+const { Content } = await render(course);
+const facts = [
+  `${units.length} ${units.length === 1 ? 'unit' : 'units'}`,
+  `${readingCount} ${readingCount === 1 ? 'reading' : 'readings'}`,
+  ...d.facts,
+];
+---
+
+<Base icon={d.icon} title={d.title} heading={d.title} lede={d.summary} description={d.summary}>
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href={url('/courses/')}>Reading courses</a>
+  </nav>
+
+  <div class="intro">
+    <Prose><Content /></Prose>
+    <aside class="panel about" style={`--c:${d.color}`}>
+      {d.level && <p class="level">{d.level}</p>}
+      <ul class="facts">{facts.map((f) => <li>{f}</li>)}</ul>
+      {
+        d.updated && (
+          <p class="updated">
+            Updated{' '}
+            {d.updated.toLocaleDateString('en-IE', { month: 'long', year: 'numeric', timeZone: 'UTC' })}
+          </p>
+        )
+      }
+      {units[0] && (
+        <a class="start" href={url(`/courses/${course.id}/${units[0].slug}/`)}>
+          Start with {units[0].label}
+        </a>
+      )}
+    </aside>
+  </div>
+
+  <section class="section" aria-labelledby="units">
+    <h2 id="units">Units</h2>
+    <ol class="units">
+      {units.map((u) => (
+        <li>
+          <a class="unit panel hover-anim" href={url(`/courses/${course.id}/${u.slug}/`)} style={`--c:${d.color}`}>
+            <span class="uicon"><Icon name={u.data.icon ?? d.icon} size={36} /></span>
+            <span class="ubody">
+              <span class="ulabel">{u.label}</span>
+              <span class="utitle">{u.data.title}</span>
+              {u.data.summary && <span class="usummary">{u.data.summary}</span>}
+              <span class="ucount">
+                {u.data.readings.length} {u.data.readings.length === 1 ? 'reading' : 'readings'}
+              </span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+</Base>
+
+<style>
+  .crumbs {
+    margin-bottom: 1.5rem;
+    font-size: var(--step--1);
+  }
+
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 17rem;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  @media (max-width: 56rem) {
+    .intro {
+      grid-template-columns: 1fr;
+    }
+
+    .about {
+      order: -1;
+    }
+  }
+
+  .about {
+    padding: 1.25rem;
+    border-top: 4px solid var(--c);
+  }
+
+  .level {
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+    color: var(--c);
+  }
+
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .facts li {
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    font-size: var(--step--1);
+  }
+
+  .updated {
+    margin: 0.9rem 0 0;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+
+  .start {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    background: var(--navy);
+    color: var(--on-navy);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .start:hover,
+  .start:focus-visible {
+    background: var(--link);
+  }
+
+  h2 {
+    margin: 0 0 1rem;
+    font-size: var(--step-2);
+  }
+
+  .units {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    gap: 0.9rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .unit {
+    display: flex;
+    gap: 1rem;
+    height: 100%;
+    padding: 1rem 1.1rem;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+
+  .unit:hover,
+  .unit:focus-visible {
+    border-color: var(--c);
+  }
+
+  .uicon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 12px;
+    color: var(--c);
+    background: color-mix(in srgb, var(--c) 12%, white);
+  }
+
+  .ubody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .ulabel {
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--c);
+  }
+
+  .utitle {
+    font-family: var(--display);
+    font-size: var(--step-1);
+    font-weight: 560;
+    line-height: 1.25;
+  }
+
+  .usummary {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .ucount {
+    margin-top: 0.25rem;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+</style>

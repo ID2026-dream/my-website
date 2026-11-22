@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import CourseCard from '../../components/CourseCard.astro';
+import { getCourses } from '../../data/courses';
+import { url } from '../../utils';
+
+const list = await getCourses();
+---
+
+<Base
+  icon="book"
+  title="Reading courses"
+  heading="Reading courses"
+  lede="Self-paced courses built around selected readings, with notes for each unit."
+>
+  {
+    list.length > 0 ? (
+      <div class="grid">
+        {list.map(({ course, units, readingCount }) => (
+          <CourseCard course={course} units={units.length} readings={readingCount} />
+        ))}
+      </div>
+    ) : (
+      <p class="empty">
+        New reading courses are being prepared. In the meantime, see the modules on the{' '}
+        <a href={url('/teaching/')}>Teaching</a> page.
+      </p>
+    )
+  }
+</Base>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 28rem), 1fr));
+    gap: 1rem;
+  }
+
+  .empty {
+    max-width: var(--measure);
+    color: var(--muted);
+  }
+</style>

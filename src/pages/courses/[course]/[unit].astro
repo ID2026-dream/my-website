@@ -1,0 +1,348 @@
+---
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Prose from '../../../components/Prose.astro';
+import { getCourses } from '../../../data/courses';
+import { url } from '../../../utils';
+
+export async function getStaticPaths() {
+  const list = await getCourses();
+  return list.flatMap(({ course, units }) =>
+    units.map((unit, i) => ({
+      params: { course: course.id, unit: unit.slug },
+      props: { course, units, unit, prev: units[i - 1], next: units[i + 1] },
+    })),
+  );
+}
+
+// Files that sit in course folders (slides, notes, data), published with the site.
+const files = import.meta.glob<string>('/src/content/courses/**/*.{pdf,pptx,docx,xlsx,zip,ipynb,py,csv,txt}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+
+const { course, units, unit, prev, next } = Astro.props;
+const downloads = unit.data.downloads.map((dl) => {
+  const key = `/src/content/courses/${course.id}/${dl.file.replace(/^\.\//, '')}`;
+  if (!files[key]) throw new Error(`Download "${dl.file}" not found in the folder for ${course.id}`);
+  return { label: dl.label, href: files[key], type: dl.file.split('.').pop()!.toUpperCase() };
+});
+const d = course.data;
+const { Content } = await render(unit);
+const href = (slug: string) => url(`/courses/${course.id}/${slug}/`);
+const required = unit.data.readings.filter((r) => !r.optional);
+const further = unit.data.readings.filter((r) => r.optional);
+const groups = [
+  { title: 'Readings', items: required },
+  { title: 'Further reading', items: further },
+].filter((g) => g.items.length);
+---
+
+<Base
+  icon={unit.data.icon ?? d.icon}
+  title={`${unit.data.title} | ${d.title}`}
+  heading={unit.data.title}
+  lede={unit.data.summary}
+  description={unit.data.summary ?? d.summary}
+>
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href={url('/courses/')}>Reading courses</a>
+    <span aria-hidden="true">/</span>
+    <a href={url(`/courses/${course.id}/`)}>{d.title}</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{unit.label}</span>
+  </nav>
+
+  <div class="layout" style={`--c:${d.color}`}>
+    <aside class="toc" aria-label={`Units in ${d.title}`}>
+      <p class="toc-title">{d.title}</p>
+      <ol>
+        {units.map((u) => (
+          <li>
+            <a href={href(u.slug)} aria-current={u.id === unit.id ? 'page' : undefined}>
+              <span class="n">{u.number}</span>
+              {u.data.title}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </aside>
+
+    <article>
+      {
+        downloads.length > 0 && (
+          <section class="materials" aria-labelledby="materials">
+            <h2 id="materials">Unit materials</h2>
+            <ul>
+              {downloads.map((dl) => (
+                <li>
+                  <a href={dl.href} download>
+                    <span class="ftype">{dl.type}</span>
+                    {dl.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+      {
+        groups.map((g, i) => (
+          <section class="readings" aria-label={g.title}>
+            <h2>{g.title}</h2>
+            {i === 0 && unit.data.readingsIntro && <p class="rintro">{unit.data.readingsIntro}</p>}
+            <ol>
+              {g.items.map((r) => (
+                <li>
+                  <p class="rtitle">{r.url ? <a href={r.url}>{r.title}</a> : r.title}</p>
+                  {(r.authors || r.source || r.year) && (
+                    <p class="rmeta">{[r.authors, r.source, r.year].filter(Boolean).join(', ')}</p>
+                  )}
+                  {r.note && <p class="rnote">{r.note}</p>}
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))
+      }
+
+      <Prose><Content /></Prose>
+
+      <nav class="pager" aria-label="Previous and next unit">
+        {
+          prev ? (
+            <a class="prev" href={href(prev.slug)}>
+              <span>Previous: {prev.label}</span>
+              {prev.data.title}
+            </a>
+          ) : (
+            <a class="prev" href={url(`/courses/${course.id}/`)}>
+              <span>Back to</span>
+              Course overview
+            </a>
+          )
+        }
+        {
+          next && (
+            <a class="next" href={href(next.slug)}>
+              <span>Next: {next.label}</span>
+              {next.data.title}
+            </a>
+          )
+        }
+      </nav>
+    </article>
+  </div>
+</Base>
+
+<style>
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+    margin-bottom: 1.75rem;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 52rem) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+
+    .toc {
+      order: 2;
+    }
+  }
+
+  .toc {
+    position: sticky;
+    top: 1.5rem;
+    padding-top: 0.25rem;
+    border-top: 4px solid var(--c);
+  }
+
+  @media (max-width: 52rem) {
+    .toc {
+      position: static;
+    }
+  }
+
+  .toc-title {
+    margin: 0.75rem 0 0.5rem;
+    font-weight: 600;
+  }
+
+  .toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc a {
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 8px;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    line-height: 1.35;
+  }
+
+  .toc a:hover {
+    background: color-mix(in srgb, var(--c) 8%, transparent);
+  }
+
+  .toc a[aria-current='page'] {
+    background: color-mix(in srgb, var(--c) 14%, transparent);
+    font-weight: 600;
+  }
+
+  .n {
+    flex: none;
+    width: 1.4rem;
+    color: var(--c);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .materials {
+    max-width: var(--measure);
+    margin-bottom: 1.5rem;
+  }
+
+  .materials h2 {
+    margin: 0 0 0.6rem;
+    font-size: var(--step-1);
+  }
+
+  .materials ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .materials a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.95rem 0.55rem 0.6rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .materials a:hover,
+  .materials a:focus-visible {
+    border-color: var(--c);
+  }
+
+  .ftype {
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: var(--c);
+    color: white;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+  }
+
+  .rintro {
+    margin: -0.25rem 0 0.9rem !important;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .readings {
+    max-width: var(--measure);
+    margin-bottom: 2.25rem;
+    padding: 1.25rem 1.4rem;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--c);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .readings h2 {
+    margin: 0 0 0.75rem;
+    font-size: var(--step-1);
+  }
+
+  .readings ol {
+    margin: 0;
+    padding-left: 1.3rem;
+  }
+
+  .readings li + li {
+    margin-top: 0.9rem;
+  }
+
+  .readings p {
+    margin: 0;
+  }
+
+  .rtitle {
+    font-weight: 600;
+  }
+
+  .rmeta {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .rnote {
+    margin-top: 0.2rem !important;
+    font-size: 0.9375rem;
+  }
+
+  .pager {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 0.75rem;
+    max-width: var(--measure);
+    margin-top: 3rem;
+  }
+
+  .pager a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .pager a:hover,
+  .pager a:focus-visible {
+    border-color: var(--c);
+  }
+
+  .pager span {
+    font-size: var(--step--1);
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .next {
+    text-align: right;
+    grid-column: -2;
+  }
+</style>

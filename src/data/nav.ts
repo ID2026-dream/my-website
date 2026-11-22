@@ -32,6 +32,7 @@ export const NAV_GROUPS: { heading: string; items: NavItem[] }[] = [
     heading: 'Teaching and engagement',
     items: [
       { label: 'Teaching', path: '/teaching/', primary: true },
+      { label: 'Reading courses', path: '/courses/' },
       { label: 'Outreach', path: '/outreach/' },
     ],
   },
