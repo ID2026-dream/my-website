@@ -1,7 +1,7 @@
 ---
 title: "Isomorphisms and other special arrows"
 summary: "When two things are the same: isomorphisms, monos and epis, and relabelling, embedding and aggregating networks."
-icon: shield
+icon: arrows-left-right
 readingsIntro: "Read after finishing the notes (about 30 to 45 minutes)."
 downloads:
   - label: "Detailed notes (25 pages)"

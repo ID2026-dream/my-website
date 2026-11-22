@@ -1,7 +1,7 @@
 ---
 title: "Diagrams"
 summary: "Commutative and string diagrams: when two routes agree, and how to draw packet-processing pipelines."
-icon: network
+icon: flow-arrow
 readingsIntro: "Read after finishing the notes (about 30 to 45 minutes)."
 downloads:
   - label: "Detailed notes (27 pages)"

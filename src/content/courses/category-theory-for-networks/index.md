@@ -3,7 +3,7 @@ title: Category Theory for Networks
 summary: From no category theory at all to reading applied category theory papers about communication networks, one idea at a time.
 level: Reading course
 facts: ['About 4 hours per unit', 'Notes and slides for every unit', 'Units 6 to 11 in preparation']
-icon: nodes
+icon: graph
 color: '#2e5d9f'
 order: 1
 updated: 2026-11-01

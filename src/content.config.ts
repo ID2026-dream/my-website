@@ -20,7 +20,7 @@ const courses = defineCollection({
     summary: z.string(),
     level: z.string().optional(), // e.g. 'Postgraduate', 'Self-paced'
     facts: z.array(z.string()).default([]), // short tags, e.g. '6 units', 'Level 9'
-    icon: z.string().default('book'), // an icon name from src/components/Icon.astro
+    icon: z.string().default('books'), // an icon name from src/components/icon-data.ts
     color: z.string().default('#0a6a83'),
     order: z.number().default(100), // lower numbers are listed first
     updated: z.coerce.date().optional(),

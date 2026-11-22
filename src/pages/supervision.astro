@@ -1,4 +1,5 @@
 ---
+import SiteLink from '../components/SiteLink.astro';
 import Base from '../layouts/Base.astro';
 import TeamPhoto from '../components/TeamPhoto.astro';
 import { projectId } from '../data/projects';
@@ -26,7 +27,7 @@ const lines = (...xs: (string | undefined | false)[]) => xs.filter(Boolean) as s
 ---
 
 <Base
-  icon="people"
+  icon="users-three"
   title="Supervision"
   heading="Supervision"
   lede="PhD students, Masters by Research students and postdoctoral fellows at SETU and partner universities."
@@ -84,7 +85,7 @@ const lines = (...xs: (string | undefined | false)[]) => xs.filter(Boolean) as s
                 {m.links && m.links.length > 0 && (
                   <p class="links">
                     {m.links.map((l) => (
-                      <a href={l.href}>{l.label}</a>
+                      <SiteLink href={l.href}>{l.label}</SiteLink>
                     ))}
                   </p>
                 )}
@@ -133,7 +134,7 @@ const lines = (...xs: (string | undefined | false)[]) => xs.filter(Boolean) as s
                 {m.links && m.links.length > 0 && (
                   <p class="links">
                     {m.links.map((l) => (
-                      <a href={l.href}>{l.label}</a>
+                      <SiteLink href={l.href}>{l.label}</SiteLink>
                     ))}
                   </p>
                 )}

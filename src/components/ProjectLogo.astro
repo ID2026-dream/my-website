@@ -1,0 +1,68 @@
+---
+// A project's logo, or its icon on a tinted tile when there is no logo.
+// Order: a file in src/assets/logos/ named after the project (e.g.
+// q-fence.svg, enact.png), then the `logo` address in projects.ts, which is
+// fetched when the site is built, then the icon.
+import Icon from './Icon.astro';
+import { projectId, type Project } from '../data/projects';
+import { localLogo, remoteLogo } from '../utils/logos';
+
+interface Props {
+  project: Project;
+  height?: number; // logo height in pixels
+  tile?: number; // icon tile size in pixels
+  iconSize?: number;
+}
+
+const { project: p, height = 48, tile = 64, iconSize = 44 } = Astro.props;
+
+const local = await localLogo(projectId(p.name), height * 2);
+const logo = local ?? (p.logo ? await remoteLogo(p.logo, height * 2) : null);
+const dark = Boolean(p.logoOnDark || logo?.light);
+---
+
+{
+  logo ? (
+    <span class:list={['logo', { dark }]} style={`--h:${height}px`}>
+      <img src={logo.src} alt="" height={height} width={Math.round(logo.width / 2)} decoding="async" />
+    </span>
+  ) : (
+    <span class="tile" style={`--t:${tile}px;--c:${p.color}`}>
+      <Icon name={p.icon} size={iconSize} />
+    </span>
+  )
+}
+
+<style>
+  .tile {
+    display: grid;
+    place-items: center;
+    width: var(--t);
+    height: var(--t);
+    border-radius: calc(var(--t) * 0.22);
+    color: var(--c);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--c) 16%, white), color-mix(in srgb, var(--c) 5%, white));
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  .logo img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: var(--h);
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  /* White artwork sits on the site's navy. */
+  .logo.dark {
+    padding: calc(var(--h) * 0.22) calc(var(--h) * 0.34);
+    border-radius: 10px;
+    background: var(--navy);
+  }
+</style>

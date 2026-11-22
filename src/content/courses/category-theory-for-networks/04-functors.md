@@ -1,7 +1,7 @@
 ---
 title: "Functors"
 summary: "Structure-preserving translations between categories: measurements, mappings and data that respect routes."
-icon: pulse
+icon: vector-two
 readingsIntro: "Read after finishing the notes (about 45 to 60 minutes)."
 downloads:
   - label: "Detailed notes (28 pages)"

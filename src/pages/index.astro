@@ -1,4 +1,6 @@
 ---
+import ProjectLogo from '../components/ProjectLogo.astro';
+import SiteLink from '../components/SiteLink.astro';
 import Base from '../layouts/Base.astro';
 import Portrait from '../components/Portrait.astro';
 import PucaMark from '../components/PucaMark.astro';
@@ -36,11 +38,11 @@ const leading = PROJECTS.filter(
         {
           SITE.links.slice(0, 4).map((link) => (
             <li>
-              <a href={link.href}>{link.label}</a>
+              <SiteLink href={link.href} mono>{link.label}</SiteLink>
             </li>
           ))
         }
-        {SITE.email && <li><a href={`mailto:${SITE.email}`}>Email</a></li>}
+        {SITE.email && <li><SiteLink href={`mailto:${SITE.email}`} mono>Email</SiteLink></li>}
       </ul>
     </div>
   </div>
@@ -103,6 +105,7 @@ const leading = PROJECTS.filter(
         <ul class="leading">
           {leading.map((p) => (
             <li>
+              <span class="mark"><ProjectLogo project={p} height={28} tile={34} iconSize={24} /></span>
               <p class="side-title">{p.name}</p>
               <p class="side-meta">{p.role!.split(';')[0]}, {p.funder.replace(/ \(.*\)$/, '')}</p>
             </li>
@@ -164,8 +167,10 @@ const leading = PROJECTS.filter(
     list-style: none;
   }
 
-  .links a {
-    display: inline-block;
+  .links :global(a) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     padding: 0.25rem 0.8rem;
     border: 1px solid var(--navy-line);
     border-radius: 999px;
@@ -175,7 +180,7 @@ const leading = PROJECTS.filter(
     text-decoration: none;
   }
 
-  .links a:hover {
+  .links :global(a:hover) {
     border-color: var(--signal);
   }
 
@@ -356,7 +361,14 @@ const leading = PROJECTS.filter(
   }
 
   .leading li + li {
-    margin-top: 0.6rem;
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .mark {
+    display: block;
+    margin-bottom: 0.4rem;
   }
 
   .leading p {

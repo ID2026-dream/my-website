@@ -6,13 +6,21 @@ export interface Project {
   fullName?: string;
   funder: string;
   role?: string;
-  icon: string; // an icon name from src/components/Icon.astro
+  icon: string; // an icon name from src/components/icon-data.ts, e.g. 'atom'
   color: string;
   period?: string;
   summary: string;
   links?: { label: string; href: string }[];
   tier?: 'major' | 'other'; // 'other' projects are shown in a compact list
+  // The project's logo, taken from its website when the site is built. A file
+  // in src/assets/logos/ named after the project (e.g. enact.png) is used
+  // first, so a logo can also be added by uploading it there.
+  logo?: string;
+  logoOnDark?: boolean; // true for a white logo, which is shown on a dark tile
 }
+
+/** Horizon Europe projects show the EU emblem. */
+export const isEUFunded = (p: Project) => p.funder.startsWith('Horizon Europe');
 
 /** Anchor for a project on the Research page, e.g. 'q-fence'. */
 export const projectId = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -24,8 +32,9 @@ export const PORTFOLIO =
 export const PROJECTS: Project[] = [
   {
     name: 'QUESTING',
+    logo: 'https://questing-project.eu/wp-content/uploads/2025/12/mainlogo.png',
     fullName: 'Designing, Managing and Debugging Quantum Networks',
-    icon: 'cap',
+    icon: 'atom',
     color: '#6a4bc4',
     funder: 'Horizon Europe, MSCA Doctoral Network (grant 101227218, EU contribution €4.55M)',
     role: 'Coordinator',
@@ -39,8 +48,9 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'Q-FENCE',
+    logo: 'https://www.qfence-project.eu/wp-content/uploads/2026/03/Qfence-logo-1-cropped.svg',
     fullName: 'Securing Tomorrow’s Digital Infrastructure with Quantum-Resistant Cryptography',
-    icon: 'lock',
+    icon: 'lock-key',
     color: '#1f6bc2',
     funder: 'Horizon Europe, Cluster 3 Cybersecurity (grant 101225708, EU contribution €5.31M)',
     role: 'Coordinator',
@@ -54,8 +64,9 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'BRAINET',
+    logo: 'https://www.brainet-dn.eu/assets/BRAINET_Logo-END-72dpi.png',
     fullName: 'Networked Distributed Neural Interfaces for Interference-Based Brain Stimulation',
-    icon: 'pulse',
+    icon: 'brain',
     color: '#9b3d8f',
     funder: 'Horizon Europe, MSCA Doctoral Network (grant 101225775, EU contribution €4.36M)',
     role: 'Principal Investigator at SETU',
@@ -69,7 +80,7 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'ENACT',
-    icon: 'sun',
+    icon: 'wind',
     color: '#c2456b',
     fullName: 'Environmental Effect on Health Care and Wellbeing and Active Interventions',
     funder: 'Horizon Europe (HORIZON-HLTH-2024-ENVHLTH-02-06, grant 101157151)',
@@ -81,20 +92,25 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'COALESCE',
+    logo: 'https://coalesce-horizon.eu/wp-content/uploads/2024/04/colour-logo-white-text-banner-e1714139140231.png',
+    logoOnDark: true,
     fullName: 'Joint Optimization of Data and Energy Networks for Digitizing Sustainable Communities',
-    icon: 'bolt',
+    icon: 'lightning',
     color: '#b86e0b',
     funder: 'Horizon Europe, MSCA Staff Exchanges (grant 101130739, EU contribution €1.59M)',
     role: 'Coordinator',
     period: 'December 2023 to November 2027',
     summary:
       'Jointly optimises energy grids and telecommunication networks, which depend on each other, with partners in Ireland, Cyprus, Finland and Portugal. It produced the first quantification of the energy deficits of the wireless access layer: 20–40% of airtime is spent on pilots and synchronisation overhead, roughly 100 TWh of lost energy a year.',
-    links: [{ label: 'CORDIS record', href: 'https://cordis.europa.eu/project/id/101130739' }],
+    links: [
+      { label: 'Project website', href: 'https://coalesce-horizon.eu/' },
+      { label: 'CORDIS record', href: 'https://cordis.europa.eu/project/id/101130739' },
+    ],
   },
   {
     name: 'PlastG',
     fullName: 'Plasticity and Autonomous Adaptation of Wireless Networks in Support of Trustworthy 6G',
-    icon: 'network',
+    icon: 'broadcast',
     color: '#0a6a83',
     funder: 'Research Ireland, US–Ireland R&D Partnership Programme (€348,288)',
     role: 'Coordinator',
@@ -105,7 +121,7 @@ export const PROJECTS: Project[] = [
   {
     name: 'CoQREATE',
     fullName: 'Convergent Quantum Research Alliance in Telecommunications',
-    icon: 'quantum',
+    icon: 'handshake',
     color: '#5a3fa0',
     funder: 'Research Ireland, US–Ireland Centre-to-Centre programme (€200,000)',
     period: 'From August 2022',
@@ -114,7 +130,7 @@ export const PROJECTS: Project[] = [
   {
     name: 'AIQ-Shield',
     fullName: 'Quantum-Proofing AI: A Zero Trust Approach',
-    icon: 'shield',
+    icon: 'shield-check',
     color: '#2e5d9f',
     funder: 'TU RISE Postdoctoral Fellowship (€123,373)',
     period: 'From October 2024',
@@ -123,7 +139,7 @@ export const PROJECTS: Project[] = [
   {
     name: 'ANODE',
     fullName: 'AI-aided Wavelet Transform for Denoising Signals',
-    icon: 'wave',
+    icon: 'waveform',
     color: '#0b8783',
     funder: 'Research Ireland platform funding through CONNECT (€176,000)',
     period: 'From July 2024',
@@ -132,7 +148,7 @@ export const PROJECTS: Project[] = [
   {
     name: 'MARSDEN',
     fullName: 'Adaptive Maritime Guardianship through Advanced Noise Processing',
-    icon: 'sensor',
+    icon: 'anchor',
     color: '#1d5f7a',
     funder: 'Research Ireland Future Innovator Prize programme (€193,689)',
     period: 'From December 2024',
@@ -142,7 +158,7 @@ export const PROJECTS: Project[] = [
     name: 'AgNav',
     fullName:
       'Industry-level data integration and development of a digital sustainability platform and decision support tool for agricultural production systems in Ireland',
-    icon: 'globe',
+    icon: 'tractor',
     color: '#3f8a2e',
     funder: 'Department of Agriculture, Food and the Marine, 2023 Thematic Research Call',
     period: 'From March 2024',
@@ -153,7 +169,7 @@ export const PROJECTS: Project[] = [
   {
     name: 'GreenSphere',
     fullName: 'Sustainable AI Evolution for Social Media Management',
-    icon: 'globe',
+    icon: 'leaf',
     color: '#3f8a2e',
     funder: 'Enterprise Ireland Innovation Partnership (€120,830)',
     period: '2025',
@@ -161,7 +177,7 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'CONNECT',
-    icon: 'nodes',
+    icon: 'share-network',
     color: '#0b8783',
     fullName: 'Taighde Éireann – Research Ireland Centre for Future Networks and Communications',
     funder: 'Research Ireland',
@@ -175,7 +191,7 @@ export const PROJECTS: Project[] = [
   {
     name: 'SAtComm',
     fullName: 'Sustainable Atlantic Communities',
-    icon: 'bolt',
+    icon: 'solar-panel',
     color: '#b86e0b',
     funder: 'Interreg Atlantic Area, European Regional Development Fund (€3.2M total)',
     period: '2023 to 2026',
@@ -184,7 +200,7 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'SmartValveAI',
-    icon: 'sensor',
+    icon: 'pipe',
     color: '#1d5f7a',
     funder: 'Enterprise Ireland Innovation Partnership (€290,000)',
     period: 'From August 2024',
@@ -194,7 +210,7 @@ export const PROJECTS: Project[] = [
   {
     name: 'INTERFACING',
     fullName: 'Integrating Sensing and Communication (ISAC) for Advanced Applications',
-    icon: 'building',
+    icon: 'target',
     color: '#566176',
     funder: 'Higher Education Authority, 2024 HEARG Capital Equipment Call (€217,250)',
     period: 'From October 2024',
@@ -203,7 +219,7 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'ABM QuantumNet',
-    icon: 'quantum',
+    icon: 'graph',
     color: '#5a3fa0',
     funder: 'European Open Science Cloud (€3M)',
     period: 'From February 2024',

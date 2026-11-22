@@ -152,7 +152,8 @@ a:hover {
 
 /* ------------------------------------------------------------------
    Icon animation
-   Each moving part of an icon has a data-p name. Icons play once when
+   Each moving part of an icon has a data-p name (offsets are
+   percentages of the part, so they suit any icon size). Icons play once when
    they scroll into view (.play), loop while their card is hovered or
    focused (.hover-anim), and loop all the time when marked .live.
    ------------------------------------------------------------------ */
@@ -176,7 +177,7 @@ a:hover {
 }
 
 [data-p='orbit'] { --anim: ico-spin 9s linear; }
-[data-p='spin'] { --anim: ico-spin 16s linear; }
+[data-p='spin'] { --anim: ico-spin 12s linear; }
 [data-p='glow'] { --anim: ico-glow 2.6s ease-in-out; }
 [data-p='core'] { --anim: ico-pulse 2.2s ease-in-out; }
 [data-p='blink'] { --anim: ico-blink 2.2s ease-in-out; }
@@ -213,7 +214,7 @@ a:hover {
 @keyframes ico-blink { 50% { opacity: 0.3; } }
 @keyframes ico-wave { 35% { opacity: 0.1; } }
 @keyframes ico-beat {
-  15% { transform: scale(1.09); }
+  15% { transform: scale(1.1); }
   25% { transform: scale(1); }
   35% { transform: scale(1.05); }
   50% { transform: scale(1); }
@@ -221,8 +222,8 @@ a:hover {
 @keyframes ico-trace { to { stroke-dashoffset: -1; } }
 @keyframes ico-flow { to { stroke-dashoffset: -12; } }
 @keyframes ico-rise {
-  70% { transform: translateY(-9px); opacity: 0; }
-  71% { transform: translateY(3px); opacity: 0; }
+  70% { transform: translateY(-18%); opacity: 0; }
+  71% { transform: translateY(6%); opacity: 0; }
 }
 @keyframes ico-swing {
   25% { transform: rotate(14deg); }
@@ -236,9 +237,9 @@ a:hover {
   70% { opacity: 1; }
 }
 @keyframes ico-globe { 50% { transform: scaleX(2.15); } }
-@keyframes ico-bob { 50% { transform: translateY(-2.5px); } }
-@keyframes ico-lift { 50% { transform: translateY(-3px); } }
-@keyframes ico-drift { 50% { transform: translateX(-2.5px); } }
+@keyframes ico-bob { 50% { transform: translateY(-5%); } }
+@keyframes ico-lift { 50% { transform: translateY(-7%); } }
+@keyframes ico-drift { 50% { transform: translateX(-6%); } }
 
 /* ---- The Púca emblem: the eye blinks, the network twinkles ---- */
 .puca .eye,

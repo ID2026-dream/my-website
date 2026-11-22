@@ -1,7 +1,7 @@
 ---
 title: "Categories"
 summary: "Objects, arrows and composition, and how a communication network becomes a category of routes."
-icon: nodes
+icon: circles-three-plus
 readingsIntro: "Read after finishing the notes (about 30 to 45 minutes)."
 downloads:
   - label: "Detailed notes (28 pages)"

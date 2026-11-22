@@ -1,7 +1,7 @@
 ---
 title: Getting started
 summary: What a unit looks like, with readings at the top and notes underneath.
-icon: book
+icon: book-open-text
 readings:
   - title: A Mathematical Theory of Communication
     authors: C. E. Shannon

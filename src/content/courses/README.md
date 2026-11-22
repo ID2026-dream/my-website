@@ -24,9 +24,13 @@ site. Change it to `draft: false` when it is ready.
 
 ## Icons
 
-Use any of these names for `icon`: quantum, network, sensor, shield, pulse,
-wave, person, briefcase, trophy, flask, book, cap, megaphone, building,
-people, lock, sun, bolt, globe, nodes.
+Icons come from the Phosphor set (https://phosphoricons.com). Use any of
+these names for `icon`:
+
+anchor, arrow-square-out, arrows-left-right, arrows-merge, arrows-split, atom, bezier-curve, book-open-text, books, brain, briefcase, broadcast, buildings, cell-tower, chalkboard-teacher, chart-line-up, circles-four, circles-three, circles-three-plus, circuitry, compass, cube, eye, flask, flow-arrow, function, gear-six, git-fork, globe-hemisphere-west, globe-simple, graduation-cap, graph, handshake, heartbeat, hexagon, house, identification-badge, identification-card, infinity, intersect, leaf, lightbulb-filament, lightning, link, lock-key, megaphone, microscope, path, pencil-simple-line, pipe, plant, polygon, robot, share-network, shield-check, sigma, solar-panel, sparkle, spiral, sun, target, tractor, tree-structure, trophy, user-circle, user-square, users-three, vector-two, wave-sine, waveform, waves, wind.
+
+To use a Phosphor icon that is not in this list, ask for it to be added to
+`src/components/icon-data.ts`. An unknown name shows the book icon.
 
 ## Slides, notes and other files
 

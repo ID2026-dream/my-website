@@ -5,6 +5,7 @@ import '@fontsource-variable/newsreader/opsz-italic.css';
 import '../styles/global.css';
 import Wave from '../components/Wave.astro';
 import Icon from '../components/Icon.astro';
+import SiteLink from '../components/SiteLink.astro';
 import PucaMark from '../components/PucaMark.astro';
 import OrgLogo from '../components/OrgLogo.astro';
 import { SITE } from '../site.config';
@@ -135,9 +136,9 @@ const isHere = (href: string) => here === href.split('#')[0];
             {
               SITE.links.map((link) => (
                 <li>
-                  <a href={link.href} rel="me">
+                  <SiteLink href={link.href} rel="me" mono>
                     {link.label}
-                  </a>
+                  </SiteLink>
                 </li>
               ))
             }

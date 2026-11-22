@@ -1,0 +1,60 @@
+---
+// A link to another site, with that site's logo in front: ORCID, Google
+// Scholar, LinkedIn, ResearchGate, IEEE, DOI, Scopus and arXiv get
+// their own marks; profile pages and other sites get a matching icon.
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  rel?: string;
+  mono?: boolean; // marks take the text colour (for the dark header and footer)
+}
+
+const { href, rel, mono = false } = Astro.props;
+
+// [test, icon, brand colour]; the first match wins.
+const MARKS: [RegExp, string, string?][] = [
+  [/orcid\.org/, 'academicons:orcid', '#a6ce39'],
+  [/scholar\.google\./, 'academicons:google-scholar', '#4285f4'],
+  [/linkedin\.com/, 'bi:linkedin', '#0a66c2'],
+  [/researchgate\.net/, 'academicons:researchgate', '#00ccbb'],
+  [/ieeexplore\.ieee\.org|ieee\.org/, 'academicons:ieee', '#00629b'],
+  [/doi\.org/, 'academicons:doi', '#fcb425'],
+  [/scopus\.com/, 'academicons:scopus', '#e9711c'],
+  [/arxiv\.org/, 'academicons:arxiv', '#b31b1b'],
+  [/cordis\.europa\.eu/, 'ph:database'],
+  [/research\.setu\.ie|\/people\/|\/persons\/|\/staff\/|dt_team/, 'ph:identification-card'],
+  [/tutors\.dev|netlify\.app/, 'ph:chalkboard-teacher'],
+  [/^mailto:/, 'ph:envelope-simple'],
+];
+
+const match = MARKS.find(([test]) => test.test(href));
+const [, icon, brand] = match ?? [null, 'ph:globe-simple'];
+---
+
+<a class="site-link" href={href} rel={rel} style={brand && !mono ? `--brand:${brand}` : undefined}>
+  <span class:list={['mark', { flag: icon.startsWith('flag:') }]}><Icon name={icon} size={16} animate="none" /></span><slot />
+</a>
+
+<style>
+  .site-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+
+  .mark {
+    display: inline-flex;
+    flex: none;
+    color: var(--brand, currentColor);
+  }
+
+  .mark.flag :global(svg) {
+    border-radius: 2px;
+  }
+
+  .mark :global(svg) {
+    height: 1.05em;
+    width: auto;
+  }
+</style>

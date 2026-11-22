@@ -1,7 +1,7 @@
 ---
 title: "Natural transformations"
 summary: "Consistent families of maps: unit conversions, clock offsets, and methods that ignore arbitrary labels."
-icon: globe
+icon: arrows-merge
 readingsIntro: "Read after finishing the notes (about 45 to 60 minutes)."
 downloads:
   - label: "Detailed notes (26 pages)"

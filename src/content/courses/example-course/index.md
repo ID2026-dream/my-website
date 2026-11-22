@@ -3,7 +3,7 @@ title: Example reading course
 summary: A template to copy. It is a draft, so it never appears on the live site.
 level: Self-paced
 facts: ['About 4 hours']
-icon: book
+icon: books
 color: '#0a6a83'
 order: 100
 draft: true
